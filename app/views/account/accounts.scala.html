@@ -1,0 +1,15 @@
+@(results: List[Account])
+
+    @import bootstrap._
+
+    @main("All Accounts") {
+
+        <div class="row">
+            <a href="@routes.AccountController.createAccount()" class="btn btn-primary">Create a new account</a>
+
+        </div>
+
+        @for(account <- results) {
+            @linkableResultLine(account.name, routes.AccountController.viewAccount(account.id))
+        }
+    }

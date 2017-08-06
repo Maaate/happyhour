@@ -1,0 +1,57 @@
+@(promotionForm: Form[Promotion], serviceTypes: List[ServiceType])(implicit messages: Messages)
+
+@import helper._
+@import b3.vertical.fieldConstructor
+
+@import bootstrap._
+
+@main("Edit Promotion") {
+    <div class="container-fluid">
+        <div class="row">
+            <div class=".col-md-offset-4 col-md-8">
+
+            @form(routes.PromotionController.savePromotion(), 'class -> "form-horizontal", 'value -> "true") {
+
+                @b3.hidden("id", promotionForm("id").value)
+                @b3.hidden("pubId", promotionForm("pubId").value)
+
+                <div class="form-group">
+                    <label for="startTime">Start Time</label>
+                    @b3.time(promotionForm("startTime"), 'required -> true)
+                </div>
+                <div class="form-group">
+                    <label for="endTime">End Time</label>
+                    @b3.time(promotionForm("endTime"), 'required -> true)
+                </div>
+
+                @b3.checkbox(promotionForm("monday"), '_text -> "Monday")
+                @b3.checkbox(promotionForm("tuesday"), '_text -> "Tuesday")
+                @b3.checkbox(promotionForm("wednesday"), '_text -> "Wednesday")
+                @b3.checkbox(promotionForm("thursday"), '_text -> "Thursday")
+                @b3.checkbox(promotionForm("friday"), '_text -> "Friday")
+                @b3.checkbox(promotionForm("saturday"), '_text -> "Saturday")
+                @b3.checkbox(promotionForm("sunday"), '_text -> "Sunday")
+
+
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    @b3.textarea(promotionForm("description"))
+                </div>
+
+                @for(serviceType <- serviceTypes) {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="serviceTypes[@serviceType.id]" value=@serviceType.id>
+                            @serviceType.name
+                        </label>
+                    </div>
+                }
+
+                @standardButtons()
+            }
+            </div>
+        </div>
+    </div>
+
+}

@@ -1,0 +1,14 @@
+@(results: List[Pub])
+
+@import bootstrap._
+
+@main("All Pubs") {
+
+    <div class="row">
+    <a href="@routes.PubController.createPub()" class="btn btn-primary">Create a new pub</a>
+
+    </div>
+    @for(pub <- results) {
+        @linkableResultLine(pub.name, routes.PubController.viewPub(pub.id))
+    }
+}

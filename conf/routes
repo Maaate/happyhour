@@ -1,0 +1,46 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Swagger stuff
+GET         /swagger.json                     controllers.ApiHelpController.getResources
+GET         /swagger/*file                    controllers.Assets.at(path="/public/swagger", file)
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                     controllers.Assets.at(path="/public", file)
+
+#Accounts
+GET         /accounts                         @controllers.AccountController.listAccounts(term: Option[String] = None, page: Option[Int] = None, items: Option[Int] = None)
+GET         /accounts/create                  @controllers.AccountController.createAccount
+GET         /account/:id                      @controllers.AccountController.viewAccount(id: java.util.UUID)
+GET         /account/:id/edit                 @controllers.AccountController.editAccount(id: java.util.UUID)
+POST        /account                          @controllers.AccountController.saveAccount
+
+#Pubs
+GET         /pubs                             @controllers.PubController.listPubs(term: Option[String] = None, page: Option[Int] = None, items: Option[Int] = None)
+GET         /pub/create                       @controllers.PubController.createPub
+GET         /pub/:id                          @controllers.PubController.viewPub(id: java.util.UUID)
+GET         /pub/:id/edit                     @controllers.PubController.editPub(id: java.util.UUID)
+POST        /pub                              @controllers.PubController.savePub
+
+#Promotions
+GET         /promotion/create                 @controllers.PromotionController.createPromotion
+GET         /promotion/:id/edit               @controllers.PromotionController.editPromotion(id: java.util.UUID)
+POST        /promotion                        @controllers.PromotionController.savePromotion
+GET         /promotion/:id/enable             @controllers.PromotionController.enablePromotion(id: java.util.UUID)
+GET         /promotion/:id/disable            @controllers.PromotionController.disablePromotion(id: java.util.UUID)
+
+# System Scrap
+GET         /system/scrape/happiest           @controllers.SystemApplication.scrapHappiestHour
+
+#API
+GET         /api/service-types/groups         @controllers.ServiceTypeController.listServiceTypeGroups()
+GET         /api/service-types                @controllers.ServiceTypeController.listServiceTypes()
+GET         /api/search                       @controllers.PubController.fullSearch(lat:Double, long:Double, distanceInMetres: Double ?= 10000, currentTime: org.joda.time.LocalTime, dayOfWeek: Option[Int], category: Option[Long], current: Boolean ?= false, page:Int ?= 1, items:Int ?= 20)
+GET         /api/pub/:id                      @controllers.PubController.viewJsonPub(id: java.util.UUID, lat: Double, long: Double)
+POST        /api/pub                          @controllers.PubController.savePub
+GET         /api/pubFromGoogle                @controllers.PubController.findByGoogle(placeId: String)
+
+POST        /api/promotion                    @controllers.PromotionController.savePromotion
+PUT         /api/promotion/:id/enable         @controllers.PromotionController.enablePromotion(id: java.util.UUID)
+PUT         /api/promotion/:id/disable        @controllers.PromotionController.disablePromotion(id: java.util.UUID)

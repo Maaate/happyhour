@@ -1,0 +1,19 @@
+@(account: Account)
+
+@import bootstrap._
+
+@main("Your Accounts") {
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container">
+                @resultLine("Company Name", account.name)
+                @resultLine("Username", account.username)
+                @resultLine("Contact First Name", account.firstName)
+                @resultLine("Contact Last Name", account.lastName)
+                @resultLine("Contact Phone", account.phone)
+
+                <a href="@routes.AccountController.editAccount(account.id)" class="btn btn-primary">Edit the account</a>
+            </div>
+        </div>
+    </div>
+}

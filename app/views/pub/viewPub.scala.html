@@ -1,0 +1,67 @@
+@(pub: Pub)
+
+@import helper._
+
+@import bootstrap._
+
+@main("Your Pub") {
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container">
+                @resultLine("Pub Name", pub.name)
+                @resultLine("Address", pub.address)
+                @resultLine("Suburb", pub.addressSuburb)
+                @resultLine("State", pub.addressState)
+                @resultLine("Website", pub.website.getOrElse(null))
+                @resultLine("Enabled", if(pub.enabled) "Enabled" else "Disabled")
+
+                <div>
+                    <h4>Promotions</h4>
+
+                    @helper.form(action = routes.PromotionController.createPromotion) {
+                        @b3.hidden("pubId", pub.id)
+                        <button type="submit" value="submit" class="btn btn-primary">New Promotion</button>
+                    }
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Description</th>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                                <th>Sun</th>
+                                <th>Services</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @for(promotion <- pub.promotions) {
+                            <tr>
+                                <td>@promotion.startTime</td>
+                                <td>@promotion.endTime</td>
+                                <td>@promotion.description</td>
+                                <td>@promotion.monday</td>
+                                <td>@promotion.tuesday</td>
+                                <td>@promotion.wednesday</td>
+                                <td>@promotion.thursday</td>
+                                <td>@promotion.friday</td>
+                                <td>@promotion.saturday</td>
+                                <td>@promotion.sunday</td>
+                                <td>@promotion.serviceTypes.map(_.name).mkString(", ")</td>
+                                <td><a href="@routes.PromotionController.editPromotion(promotion.id)">Edit</a> </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+                <a href="@routes.PubController.editPub(pub.id)" class="btn btn-primary">Edit the pub</a>
+            </div>
+        </div>
+    </div>
+}

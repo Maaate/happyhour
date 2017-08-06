@@ -1,0 +1,42 @@
+@(accountForm: Form[Account])(implicit messages: Messages)
+
+@import helper._
+@import b3.vertical.fieldConstructor
+
+@import bootstrap._
+
+@main("Edit Account") {
+    @form(routes.AccountController.saveAccount(), 'class -> "form-horizontal") {
+        @b3.hidden("id", accountForm("id").value)
+
+        <div class="form-group">
+            <label for="name">Account Name</label>
+            @b3.text(accountForm("name"), 'placeholder -> "The Account's Name", 'required -> true)
+        </div>
+
+        <div class="form-group">
+            <label for="username">Email</label>
+            @b3.email(accountForm("username"), 'placeholder -> "Email Address", 'required -> true)
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            @b3.password(accountForm("password"), 'required -> true)
+        </div>
+
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            @b3.text(accountForm("firstName"), 'placeholder -> "The Account holder's first name", 'required -> true)
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            @b3.text(accountForm("lastName"), 'placeholder -> "The Account holder's last name", 'required -> true)
+        </div>
+        <div class="form-group">
+            <label for="phone">Contact Number</label>
+            @b3.text(accountForm("phone"), 'placeholder -> "The Account holder's phone number", 'required -> true)
+        </div>
+        @standardButtons()
+    }
+}

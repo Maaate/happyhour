@@ -1,0 +1,69 @@
+@(pubForm: Form[Pub])(implicit messages: Messages)
+
+@import b3.vertical.fieldConstructor
+@import helper._
+
+@import bootstrap._
+
+@main("Edit Pub") {
+    <div class="row">
+        @form(routes.PubController.savePub(), 'class -> "form-horizontal") {
+            @b3.hidden("id", pubForm("id").value)
+            @b3.hidden("accountId", pubForm("accountId").value)
+            @b3.hidden("googleId", pubForm("googleId").value)
+
+            <div class="form-group">
+                <label for="name">Pub Name</label>
+                @b3.text(pubForm("name"), 'placeholder -> "The Venue's Name", 'required -> true)
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                @b3.text(pubForm("address"), 'placeholder -> "Address of the venue", 'required -> true)
+            </div>
+
+            <div class="form-group">
+                <label for="addressSuburb">Suburb</label>
+                @b3.text(pubForm("addressSuburb"), 'placeholder -> "Venue's Suburb", 'required -> true)
+            </div>
+
+            <div class="form-group">
+                <label for="addressState">State</label>
+                @b3.text(pubForm("addressState"), 'placeholder -> "Venue's State", 'required -> true)
+            </div>
+
+            <div class="form-group">
+                <label for="addressCountry">Country</label>
+                @b3.text(pubForm("addressCountry"), 'placeholder -> "Venue's Country", 'required -> true)
+            </div>
+
+            <div class="form-group">
+                <label for="website">Company Phone</label>
+                @b3.text(pubForm("phoneNumber"), 'placeholder -> "eg +61 1234 5678")
+            </div>
+
+            <div class="form-group">
+                <label for="website">Website URL</label>
+                @b3.text(pubForm("website"), 'placeholder -> "eg http://www.visitthispub.com")
+            </div>
+
+            <div class="form-group">
+                <label for="website">Company Phone</label>
+                @b3.text(pubForm("hours"), 'placeholder -> "Days open seperated by a comma")
+            </div>
+
+            <div class="form-group">
+                <label for="longitude">Longitude</label>
+                @b3.number(pubForm("longitude"), 'placeholder -> "eg 23.5654", 'required -> true)
+            </div>
+
+            <div class="form-group">
+                <label for="latitude">Latitude</label>
+                @b3.number(pubForm("latitude"), 'placeholder -> "eg 23.5654", 'required -> true)
+            </div>
+
+            @standardButtons()
+        }
+    </div>
+
+}
