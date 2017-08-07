@@ -104,10 +104,10 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
   }
 
   @ApiOperation(value = "View the pub", response = classOf[PubResult])
-  def viewJsonPub(@ApiParam(value = "ID of the pub to fetch", example = "eddcd6cd-b8c3-43a9-bef6-9fad92d378ed") id: UUID, @ApiParam(value = "Your Latitude", example = "100.0") lat: Double, @ApiParam(value = "Your Longtitude", example = "100.0") long: Double) = {
+  def viewJsonPub(@ApiParam(value = "ID of the pub to fetch", example = "eddcd6cd-b8c3-43a9-bef6-9fad92d378ed") id: UUID) = {
     Action.async { implicit request =>
       for {
-        pub <- pubRepository.get(id, Location(latitude = BigDecimal.apply(lat), longitude = BigDecimal.apply(long)))
+        pub <- pubRepository.get(id)
       } yield Ok((Json.toJson(PubResult(pub))))
     }
   }

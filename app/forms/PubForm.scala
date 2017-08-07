@@ -29,7 +29,7 @@ object PubForm {
     "hours" -> optional(text),
     "enabled" ->default(boolean, true)
   )({ (id, googleId, name, address, addressSuburb, addressState, addressCountry, longitude, latitude, accountId, website, phoneNumber, hours, enabled) =>
-    Pub(id, googleId, name, address, addressSuburb, addressState, addressCountry, longitude, latitude, accountId, website, phoneNumber, hours, Some(new DateTime()), enabled, 0, Set())
+    Pub(id, googleId, name, address, addressSuburb, addressState, addressCountry, longitude, latitude, accountId, website, phoneNumber, hours, Some(new DateTime()), enabled, Set())
   })({
     case pub:Pub =>
       Some(pub.id, pub.googleId, pub.name, pub.address, pub.addressSuburb, pub.addressState, pub.addressCountry, pub.longitude, pub.latitude, pub.accountId, pub.website, pub.phoneNumber, pub.hoursOpenString, pub.enabled)

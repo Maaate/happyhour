@@ -16,7 +16,7 @@ import scala.concurrent.Future
 
 class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: ExecutionContexts) extends AbstractRepository {
 
-  def baseQuery(location: Location = Location()) =
+  def baseQuery(location: Option[Location] = None) =
     s"""SELECT
       |  pub.id,
       |  pub.google_id,
@@ -33,7 +33,7 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
       |  pub.hours,
       |  pub.last_updated,
       |  pub.enabled,
-      |  earth_distance(ll_to_earth( ${location.latitude}, ${location.longitude} ), ll_to_earth(pub.latitude, pub.longitude)) as ${PubRepository.distance_column_name},
+      |  ${distanceQuery(location)}
       |  promotion.id,
       |  promotion.pub_id_fk,
       |  promotion.start_time,
@@ -57,9 +57,9 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
       |  LEFT JOIN service_type ON service_type.id = promotion_service_type.service_type_id_fk
     """.stripMargin
 
-  def get(id: UUID, location: Location = Location()): Future[Pub] = Future {
+  def get(id: UUID): Future[Pub] = Future {
     db.withConnection { implicit conn =>
-      SQL(baseQuery(location) + "WHERE pub.id = {id}")
+      SQL(baseQuery() + "WHERE pub.id = {id}")
         .on('id -> id)
         .as(PubRepository.RowParsers.PubParse.*) reduce (combine)
     }
@@ -152,7 +152,7 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
         case _ => Seq()
       }
 
-      executeQuery(baseQuery(fullPubSearchQuery.location), PubRepository.RowParsers.PubParse.*, locationParams ++ timeParams ++ currentParams ++ googleParams, Some(Ascending(PubRepository.distance_column_name))).foldLeft(List[Pub]()) {
+      executeQuery(baseQuery(Some(fullPubSearchQuery.location)), PubRepository.RowParsers.PubParse.*, locationParams ++ timeParams ++ currentParams ++ googleParams, Some(Ascending(PubRepository.distance_column_name))).foldLeft(List[Pub]()) {
         case (existing: List[Pub], p: Pub) => {
           existing.filterNot(_.id == p.id) :+ combine(existing.find(_.id == p.id).getOrElse(p), p)
         }
@@ -165,6 +165,11 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
       throw new IllegalArgumentException("Cannot combine different pubs")
     }
     p1.withPromotions(p2.promotions)
+  }
+
+  private def distanceQuery(location: Option[Location]) = location match {
+    case Some(loc) => s"earth_distance(ll_to_earth( ${loc.latitude}, ${loc.longitude} ), ll_to_earth(pub.latitude, pub.longitude)) as ${PubRepository.distance_column_name},"
+    case _ => ""
   }
 }
 
@@ -189,15 +194,13 @@ object PubRepository extends AnormColumnTypes {
       str("pub.phone_number").? ~
       str("pub.hours").? ~
       dateTime("pub.last_updated").? ~
-      bool("pub.enabled") ~
-      bigDecimal(distance_column_name)
-
+      bool("pub.enabled")
   }
 
   object RowParsers {
     val PubParse = (RowDefinitions.PubRow ~ PromotionRepository.RowParsers.PromotionParse.?).map {
-      case id ~ googleId ~ name ~ address ~ addressSuburb ~ addressState ~ addressCountry ~ longitude ~ latitude ~ accountId ~ website ~ phoneNumber ~ hours ~ updatedByGoogle ~ enabled ~ distance ~ promotions=>
-        Pub(id, googleId, name, address, addressSuburb, addressState, addressCountry, longitude, latitude, accountId, website, phoneNumber, hours, updatedByGoogle, enabled, distance, promotions.toSet)
+      case id ~ googleId ~ name ~ address ~ addressSuburb ~ addressState ~ addressCountry ~ longitude ~ latitude ~ accountId ~ website ~ phoneNumber ~ hours ~ updatedByGoogle ~ enabled ~ promotions=>
+        Pub(id, googleId, name, address, addressSuburb, addressState, addressCountry, longitude, latitude, accountId, website, phoneNumber, hours, updatedByGoogle, enabled, promotions.toSet)
     }
   }
 

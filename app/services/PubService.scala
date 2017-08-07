@@ -40,7 +40,6 @@ class PubService @Inject()( pubRepository: PubRepository, ws: WSClient) {
           res.get.opening_hours.map(_.weekday_text.mkString(",")),
           Some(new DateTime()),
           true,
-          BigDecimal.valueOf(0.0),
           Set()
         )
         pub

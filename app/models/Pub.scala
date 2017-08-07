@@ -23,7 +23,7 @@ case class Pub(id: UUID,
                hoursOpenString: Option[String],
                lastUpdatedByGoogle: Option[DateTime],
                enabled: Boolean,
-               distanceInMetres: BigDecimal,
+               //distanceInMetres: BigDecimal,
                promotions: Set[Promotion]) {
 
   def withPromotions(proms: Set[Promotion]) = {
@@ -47,11 +47,11 @@ case class PubResult(@ApiModelProperty(required = true) id: UUID,
                      hours: Option[String],
                      @ApiModelProperty(required = true) longitude: BigDecimal,
                      @ApiModelProperty(required = true) latitude: BigDecimal,
-                     @ApiModelProperty(required = true) distance: BigDecimal,
+                     //@ApiModelProperty(required = true) distance: BigDecimal,
                      @ApiModelProperty(required = true) promotions: Set[Promotion])
 
 object PubResult {
-  def apply(pub: Pub): PubResult = PubResult(pub.id, pub.name, pub.address, pub.addressSuburb, pub.addressState, pub.addressCountry, pub.phoneNumber, pub.website, pub.hoursOpenString, pub.longitude, pub.latitude, pub.distanceInMetres, pub.promotions)
+  def apply(pub: Pub): PubResult = PubResult(pub.id, pub.name, pub.address, pub.addressSuburb, pub.addressState, pub.addressCountry, pub.phoneNumber, pub.website, pub.hoursOpenString, pub.longitude, pub.latitude, pub.promotions)
 }
 
 
