@@ -118,10 +118,10 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
 
   def search(fullPubSearchQuery: FullPubSearchQuery): Future[List[Pub]] = Future {
     db.withConnection { implicit conn =>
-      /*val enabledParams = Seq(
+      val enabledParams = Seq(
         "pub.enabled = true",
         "promotion.enabled = true"
-      )*/
+      )
 
       val locationParams = if (fullPubSearchQuery.location.radius == BigDecimal.valueOf(0.0)) {
         Seq()
@@ -152,7 +152,9 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
         case _ => Seq()
       }
 
-      executeQuery(baseQuery(Some(fullPubSearchQuery.location)), PubRepository.RowParsers.PubParse.*, locationParams ++ timeParams ++ currentParams ++ googleParams, Some(Ascending(PubRepository.distance_column_name))).foldLeft(List[Pub]()) {
+      val params = enabledParams ++ locationParams ++ timeParams ++ currentParams ++ googleParams
+
+      executeQuery(baseQuery(Some(fullPubSearchQuery.location)), PubRepository.RowParsers.PubParse.*, params, Some(Ascending(PubRepository.distance_column_name))).foldLeft(List[Pub]()) {
         case (existing: List[Pub], p: Pub) => {
           existing.filterNot(_.id == p.id) :+ combine(existing.find(_.id == p.id).getOrElse(p), p)
         }
