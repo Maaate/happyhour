@@ -113,7 +113,7 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
   }
 
   @ApiOperation(value = "Search nearby pub", response = classOf[PubResult], responseContainer = "List")
-  def fullSearch(@ApiParam(value = "Your Latitude", example = "-140") lat: Double, @ApiParam(value = "Your Longtitude", example = "-60") long: Double, @ApiParam(value = "Radius Search") distanceInMetres: Double = SEARCH_DIFFERENCE_IN_METRES, @ApiParam(value = "24 hour Time Format (HH:mm)", example = "18:30") currentTime: LocalTime, @ApiParam(value = "Monday = 1 ... Sunday = 7", example = "5") dayOfWeek: Option[Int] = None, category: Option[Long] = None, @ApiParam(value = "Only show currently running promotions") current: Boolean = false, @ApiParam(value = "Paged Index") page: Int = 1, @ApiParam(value = "Results to be returned") items: Int = 20) =
+  def fullSearch(@ApiParam(value = "Your Latitude", example = "-140") lat: Double, @ApiParam(value = "Your Longtitude", example = "-60") long: Double, @ApiParam(value = "Radius Search") distanceInMetres: Double = SEARCH_DIFFERENCE_IN_METRES, @ApiParam(value = "24 hour Time Format (HH:mm)", example = "18:30") currentTime: LocalTime, @ApiParam(value = "Monday = 1 ... Sunday = 7", example = "5") dayOfWeek: Option[Int] = None, serviceTypeGroupId: Option[Long] = None, @ApiParam(value = "Only show currently running promotions") current: Boolean = false, @ApiParam(value = "Paged Index") page: Int = 1, @ApiParam(value = "Results to be returned") items: Int = 20) =
     Action.async { implicit request =>
       val daytext = dayOfWeek match {
         case Some(day) => new DateTime().withDayOfWeek(day).dayOfWeek().getAsText

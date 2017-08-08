@@ -35,7 +35,7 @@ object ServiceTypeRepository extends AnormColumnTypes {
 
   object RowParsers {
     val ServiceTypeParse = (RowDefinitions.ServiceTypeRow).map {
-      case id ~ name ~ categoryId=> ServiceType(id, name, categoryId)
+      case id ~ name ~ serviceTypeGroupId=> ServiceType(id, name, serviceTypeGroupId)
     }
   }
 

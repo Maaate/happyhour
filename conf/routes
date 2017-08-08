@@ -36,7 +36,7 @@ GET         /system/scrape/happiest           @controllers.SystemApplication.scr
 #API
 GET         /api/service-types/groups         @controllers.ServiceTypeController.listServiceTypeGroups()
 GET         /api/service-types                @controllers.ServiceTypeController.listServiceTypes()
-GET         /api/search                       @controllers.PubController.fullSearch(lat:Double, long:Double, distanceInMetres: Double ?= 10000, currentTime: org.joda.time.LocalTime, dayOfWeek: Option[Int], category: Option[Long], current: Boolean ?= false, page:Int ?= 1, items:Int ?= 20)
+GET         /api/search                       @controllers.PubController.fullSearch(lat:Double, long:Double, distanceInMetres: Double ?= 10000, currentTime: org.joda.time.LocalTime, dayOfWeek: Option[Int], serviceTypeGroupId: Option[Long], current: Boolean ?= false, page:Int ?= 1, items:Int ?= 20)
 GET         /api/pub/:id                      @controllers.PubController.viewJsonPub(id: java.util.UUID)
 POST        /api/pub                          @controllers.PubController.savePub
 GET         /api/pubFromGoogle                @controllers.PubController.findByGoogle(placeId: String)
