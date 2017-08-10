@@ -2,13 +2,13 @@ package controllers
 
 import java.util.UUID
 import javax.inject.Inject
-
 import forms.PromotionForm
 import io.swagger.annotations._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import repository.{PromotionRepository, PubRepository, ServiceTypeRepository}
+import repository.{ServiceTypeRepository, PromotionRepository, PubRepository}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Api(value = "Promotion Api", consumes = "application/json", produces = "application/json")
 class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository) extends Controller with I18nSupport {
