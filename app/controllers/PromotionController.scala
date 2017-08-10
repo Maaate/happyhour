@@ -49,8 +49,8 @@ class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promo
           formWithErrors => for {
             serviceTypes <- serviceTypeRepository.list
           } yield render {
-            case Accepts.Html() => BadRequest(views.html.promotion.editPromotion(formWithErrors, serviceTypes))
             case Accepts.Json() => BadRequest(Json.toJson(formWithErrors.errors.map(e => s"${e.key}:${e.message}")))
+            case Accepts.Html() => BadRequest(views.html.promotion.editPromotion(formWithErrors, serviceTypes))
             case _ => UnsupportedMediaType("errors")
           }
         }, {
@@ -58,8 +58,8 @@ class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promo
             - <- promotionRepository.save(promotion)
             pub <- pubRepository.get(promotion.pubId)
           } yield render {
-            case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
             case Accepts.Json() => Ok(Json.toJson("success"))
+            case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
             case _ => UnsupportedMediaType("Unsupported Media type")
           }
         }
@@ -67,28 +67,28 @@ class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promo
         )
     }
 
-  @ApiOperation(value = "Disable the Promotion", response = classOf[String])
+  @ApiOperation(value = "Disable the Promotion", response = classOf[String], consumes = "*")
   def disablePromotion(@ApiParam(value = "ID of the promotion to disable", example = "92f62d66-e336-430d-9441-d49e7dce2acd") id: UUID) = Action.async { implicit request =>
     for {
       - <- promotionRepository.setEnabled(id, false)
       promotion <- promotionRepository.get(id)
       pub <- pubRepository.get(promotion.pubId)
     } yield render {
-      case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
       case Accepts.Json() => Ok("success")
+      case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
       case _ => UnsupportedMediaType("Unsupported Media type")
     }
   }
 
-  @ApiOperation(value = "Enable the Promotion", response = classOf[String])
+  @ApiOperation(value = "Enable the Promotion", response = classOf[String], consumes = "*")
   def enablePromotion(@ApiParam(value = "ID of the promotion to enable", example = "92f62d66-e336-430d-9441-d49e7dce2acd") id: UUID) = Action.async { implicit request =>
     for {
       - <- promotionRepository.setEnabled(id, true)
       promotion <- promotionRepository.get(id)
       pub <- pubRepository.get(promotion.pubId)
     } yield render {
-      case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
       case Accepts.Json() => Ok("success")
+      case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
       case _ => UnsupportedMediaType("Unsupported Media type")
     }
   }
