@@ -58,7 +58,7 @@ class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promo
             - <- promotionRepository.save(promotion)
             pub <- pubRepository.get(promotion.pubId)
           } yield render {
-            case Accepts.Json() => Ok(Json.toJson("success"))
+            case Accepts.Json() => Ok("")
             case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
             case _ => UnsupportedMediaType("Unsupported Media type")
           }
@@ -74,7 +74,7 @@ class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promo
       promotion <- promotionRepository.get(id)
       pub <- pubRepository.get(promotion.pubId)
     } yield render {
-      case Accepts.Json() => Ok("success")
+      case Accepts.Json() => Ok("")
       case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
       case _ => UnsupportedMediaType("Unsupported Media type")
     }
@@ -87,7 +87,7 @@ class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promo
       promotion <- promotionRepository.get(id)
       pub <- pubRepository.get(promotion.pubId)
     } yield render {
-      case Accepts.Json() => Ok("success")
+      case Accepts.Json() => Ok("")
       case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
       case _ => UnsupportedMediaType("Unsupported Media type")
     }
