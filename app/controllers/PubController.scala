@@ -113,15 +113,39 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
   }
 
   @ApiOperation(value = "Search nearby pub", response = classOf[PubResult], responseContainer = "List")
-  def fullSearch(@ApiParam(value = "Your Latitude", example = "-140") lat: Double, @ApiParam(value = "Your Longtitude", example = "-60") long: Double, @ApiParam(value = "Radius Search") distanceInMetres: Double = SEARCH_DIFFERENCE_IN_METRES, @ApiParam(value = "24 hour Time Format (HH:mm)", example = "18:30") currentTime: LocalTime, @ApiParam(value = "Monday = 1 ... Sunday = 7", example = "5") dayOfWeek: Option[Int] = None, serviceTypeGroupId: Option[Long] = None, @ApiParam(value = "Only show currently running promotions") current: Boolean = false, @ApiParam(value = "Paged Index") page: Int = 1, @ApiParam(value = "Results to be returned") items: Int = 20) =
+  def fullSearch(@ApiParam(value = "Your Latitude", example = "-140") lat: Double,
+                 @ApiParam(value = "Your Longtitude", example = "-60") long: Double,
+                 @ApiParam(value = "Radius Search") distanceInMetres: Double = SEARCH_DIFFERENCE_IN_METRES,
+                 @ApiParam(value = "24 hour Time Format (HH:mm)", example = "18:30") currentTime: LocalTime,
+                 @ApiParam(value = "Monday = 1 ... Sunday = 7", example = "5") dayOfWeek: Option[Int] = None,
+                 @ApiParam(value = "Ids of of the service types, separated by comma", example = "1,2,3") serviceTypesIds: List[Long] = List(),
+                 @ApiParam(value = "Ids of of the service types groups, separated by comma", example = "1") serviceTypeGroupIds: List[Long] = List(),
+                 @ApiParam(value = "Only show currently running promotions") current: Boolean = false,
+                 @ApiParam(value = "Paged Index") page: Int = 1,
+                 @ApiParam(value = "Results to be returned") items: Int = 20
+                ) =
     Action.async { implicit request =>
       val daytext = dayOfWeek match {
         case Some(day) => new DateTime().withDayOfWeek(day).dayOfWeek().getAsText
         case _ => DateTime.now().dayOfWeek().getAsText
       }
+      val x = serviceTypeGroupIds
+      val y = serviceTypesIds
       pubRepository.search(FullPubSearchQuery(Location(lat, long, distanceInMetres), Some(currentTime), Some(daytext), current = current)).map {
         pubs => Ok(Json.toJson(pubs.map(PubResult(_))))
       }
     }
+
+  def test(ids: List[String]) = {
+    Action { implicit request =>
+      Ok(ids.last)
+    }
+  }
+
+  def test2(ids: List[Long]) = {
+    Action { implicit request =>
+      Ok(ids.last.toString)
+    }
+  }
 
 }

@@ -27,4 +27,24 @@ object Bindables {
       fmt.parseLocalTime(value)
     }
   }
+
+  // Generic list binder for base data types
+  implicit def listBinder[T](implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[List[T]] {
+
+    val seperator = ","
+
+    override def bind(key: String, params: Map[String, Seq[String]]) = stringBinder.bind(key, params).map(_.right.map(translate))
+
+    override def unbind(key: String, value: List[T]) = s"$key=${translate(value)}"
+
+    private def translate(value: String): List[T] = {
+      value.split(s"$seperator").map(_.asInstanceOf[T]).toList
+    }
+
+    private def translate(value: List[T]): String = {
+      value.mkString(seperator)
+    }
+
+  }
+
 }
