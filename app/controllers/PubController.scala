@@ -104,7 +104,7 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
   }
 
   @ApiOperation(value = "View the pub", response = classOf[PubResult])
-  def viewJsonPub(@ApiParam(value = "ID of the pub to fetch ", example = "eddcd6cd-b8c3-43a9-bef6-9fad92d378ed") id: UUID) = {
+  def viewJsonPub(@ApiParam(value = "ID of the pub to fetch", example = "eddcd6cd-b8c3-43a9-bef6-9fad92d378ed") id: UUID) = {
     Action.async { implicit request =>
       for {
         pub <- pubRepository.get(id)
@@ -122,7 +122,7 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
                  @ApiParam(value = "Ids of of the service types groups, separated by comma", example = "1") serviceTypeGroupIds: List[Long] = List(),
                  @ApiParam(value = "Only show currently running promotions") current: Boolean = false,
                  @ApiParam(value = "Paged Index") page: Int = 1,
-                 @ApiParam(value = "Results to be returned") items: Int = 20
+                 @ApiParam(value = "Number of results to be returned") items: Int = 20
                 ) =
     Action.async { implicit request =>
       val daytext = dayOfWeek match {
