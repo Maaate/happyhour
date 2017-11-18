@@ -118,7 +118,7 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
                  @ApiParam(value = "Radius Search") distanceInMetres: Double = SEARCH_DIFFERENCE_IN_METRES,
                  @ApiParam(value = "24 hour Time Format (HH:mm)", example = "18:30") currentTime: LocalTime,
                  @ApiParam(value = "Monday = 1 ... Sunday = 7", example = "5") dayOfWeek: Option[Int] = None,
-                 @ApiParam(value = "Ids of of the service types, separated by comma", example = "1,2,3") serviceTypesIds: List[Long] = List(),
+                 @ApiParam(value = "Ids of of the service types, separated by comma", example = "1,2,3") serviceTypeIds: List[Long] = List(),
                  @ApiParam(value = "Ids of of the service types groups, separated by comma", example = "1") serviceTypeGroupIds: List[Long] = List(),
                  @ApiParam(value = "Only show currently running promotions") current: Boolean = false,
                  @ApiParam(value = "Paged Index") page: Int = 1,
@@ -129,9 +129,7 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
         case Some(day) => new DateTime().withDayOfWeek(day).dayOfWeek().getAsText
         case _ => DateTime.now().dayOfWeek().getAsText
       }
-      val x = serviceTypeGroupIds
-      val y = serviceTypesIds
-      pubRepository.search(FullPubSearchQuery(Location(lat, long, distanceInMetres), Some(currentTime), Some(daytext), current = current)).map {
+      pubRepository.search(FullPubSearchQuery(Location(lat, long, distanceInMetres), Some(currentTime), Some(daytext), serviceTypeGroupIds = serviceTypeGroupIds, serviceTypeIds = serviceTypeIds,  current = current)).map {
         pubs => Ok(Json.toJson(pubs.map(PubResult(_))))
       }
     }

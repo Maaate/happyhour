@@ -152,7 +152,19 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
         case _ => Seq()
       }
 
-      val params = enabledParams ++ locationParams ++ timeParams ++ currentParams ++ googleParams
+      val segmentTypeGroupParams = if (fullPubSearchQuery.serviceTypeGroupIds.isEmpty) {
+        Seq()
+      } else {
+        Seq(s"service_type.service_type_group_id_fk in (${fullPubSearchQuery.serviceTypeGroupIds.mkString(",")})")
+      }
+
+      val segmentTypeParams = if (fullPubSearchQuery.serviceTypeIds.isEmpty) {
+        Seq()
+      } else {
+        Seq(s"service_type.id in (${fullPubSearchQuery.serviceTypeIds.mkString(",")})")
+      }
+
+      val params = enabledParams ++ locationParams ++ timeParams ++ currentParams ++ googleParams ++ segmentTypeParams ++ segmentTypeGroupParams
 
       executeQuery(baseQuery(Some(fullPubSearchQuery.location)), PubRepository.RowParsers.PubParse.*, params, Some(Ascending(PubRepository.distance_column_name))).foldLeft(List[Pub]()) {
         case (existing: List[Pub], p: Pub) => {
