@@ -133,17 +133,4 @@ class PubController @Inject()(implicit val messagesApi: MessagesApi, pubReposito
         pubs => Ok(Json.toJson(pubs.map(PubResult(_))))
       }
     }
-
-  def test(ids: List[String]) = {
-    Action { implicit request =>
-      Ok(ids.last)
-    }
-  }
-
-  def test2(ids: List[Long]) = {
-    Action { implicit request =>
-      Ok(ids.last.toString)
-    }
-  }
-
 }
