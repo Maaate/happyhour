@@ -1,3 +1,4 @@
+
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
@@ -7,7 +8,8 @@ GET         /swagger.json                     controllers.ApiHelpController.getR
 GET         /swagger/*file                    controllers.Assets.at(path="/public/swagger", file)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                     controllers.Assets.at(path="/public", file)
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
 
 #Accounts
 GET         /accounts                         @controllers.AccountController.listAccounts(term: Option[String] = None, page: Option[Int] = None, items: Option[Int] = None)
@@ -30,9 +32,6 @@ POST        /promotion                        @controllers.PromotionController.s
 GET         /promotion/:id/enable             @controllers.PromotionController.enablePromotion(id: java.util.UUID)
 GET         /promotion/:id/disable            @controllers.PromotionController.disablePromotion(id: java.util.UUID)
 
-# System Scrap
-GET         /system/scrape/happiest           @controllers.SystemApplication.scrapHappiestHour
-
 #API
 GET         /api/service-types/groups         @controllers.ServiceTypeController.listServiceTypeGroups()
 GET         /api/service-types                @controllers.ServiceTypeController.listServiceTypes()
@@ -44,3 +43,8 @@ GET         /api/pubFromGoogle                @controllers.PubController.findByG
 POST        /api/promotion                    @controllers.PromotionController.savePromotion
 PUT         /api/promotion/:id/enable         @controllers.PromotionController.enablePromotion(id: java.util.UUID)
 PUT         /api/promotion/:id/disable        @controllers.PromotionController.disablePromotion(id: java.util.UUID)
+
+#POST        /api/user                         @controllers.UserController.saveUser()
+
+
+      

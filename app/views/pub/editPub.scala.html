@@ -1,4 +1,4 @@
-@(pubForm: Form[Pub])(implicit messages: Messages)
+@(pubForm: Form[Pub])(implicit messages: Messages, req: RequestHeader)
 
 @import b3.vertical.fieldConstructor
 @import helper._
@@ -7,7 +7,7 @@
 
 @main("Edit Pub") {
     <div class="row">
-        @form(routes.PubController.savePub(), 'class -> "form-horizontal") {
+        @form(CSRF(routes.PubController.savePub()), 'class -> "form-horizontal") {
             @b3.hidden("id", pubForm("id").value)
             @b3.hidden("accountId", pubForm("accountId").value)
             @b3.hidden("googleId", pubForm("googleId").value)

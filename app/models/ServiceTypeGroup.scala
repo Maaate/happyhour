@@ -1,4 +1,5 @@
 package models
+
 import io.swagger.annotations.ApiModelProperty
 import play.api.libs.json.Json
 

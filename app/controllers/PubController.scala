@@ -1,25 +1,25 @@
 package controllers
 
 import java.util.UUID
-import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 import forms.PubForm
 import io.swagger.annotations.{Api, ApiOperation, ApiParam}
+import javax.inject.Inject
 import models.PubResult
 import org.joda.time.{DateTime, LocalTime}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{AbstractController, ControllerComponents}
 import repository.PubRepository
 import repository.helpers.{FullPubSearchQuery, Location, SimpleQuery}
 import services.PubService
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-
 @Api(value = "Pub Api", consumes = "application/json", produces = "application/json")
-class PubController @Inject()(implicit val messagesApi: MessagesApi, pubRepository: PubRepository, pubService: PubService, ws: WSClient) extends Controller with I18nSupport {
+class PubController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, pubRepository: PubRepository, pubService: PubService, ws: WSClient) extends AbstractController(cc) with I18nSupport {
+
 
   import models.PubProtocol._
 

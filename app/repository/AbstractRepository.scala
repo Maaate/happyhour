@@ -1,7 +1,7 @@
 package repository
 
-import _root_.util.ExecutionContexts
 import play.api.db.DBApi
+import util.ExecutionContexts
 
 trait AbstractRepository extends AnormColumnTypes with QueryBuilder {
 

@@ -1,7 +1,5 @@
 package repository.helpers
 
-import java.time.DayOfWeek
-
 import org.joda.time.LocalTime
 
 sealed trait SearchQuery {

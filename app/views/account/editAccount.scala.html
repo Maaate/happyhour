@@ -1,4 +1,4 @@
-@(accountForm: Form[Account])(implicit messages: Messages)
+@(accountForm: Form[Account])(implicit messages: Messages, req: RequestHeader)
 
 @import helper._
 @import b3.vertical.fieldConstructor
@@ -6,7 +6,7 @@
 @import bootstrap._
 
 @main("Edit Account") {
-    @form(routes.AccountController.saveAccount(), 'class -> "form-horizontal") {
+    @form(CSRF(routes.AccountController.saveAccount()), 'class -> "form-horizontal") {
         @b3.hidden("id", accountForm("id").value)
 
         <div class="form-group">

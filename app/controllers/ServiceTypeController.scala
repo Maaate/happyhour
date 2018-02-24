@@ -1,21 +1,20 @@
 package controllers
 
-import javax.inject.Inject
-
-import io.swagger.annotations.{ApiOperation, Api}
-import models.{ServiceTypeGroup, ServiceType}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
-import repository.{ServiceTypeGroupRepository, ServiceTypeRepository}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
-@Api(value = "Service Type Api", consumes = "application/json", produces = "application/json")
-class ServiceTypeController @Inject()(implicit val messagesApi: MessagesApi, serviceTypeRepository: ServiceTypeRepository, serviceTypeGroupRepository: ServiceTypeGroupRepository) extends Controller with I18nSupport {
+import io.swagger.annotations.{Api, ApiOperation}
+import javax.inject.Inject
+import models.{ServiceType, ServiceTypeGroup}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Json
+import play.api.mvc.{AbstractController, ControllerComponents}
+import repository.{ServiceTypeGroupRepository, ServiceTypeRepository}
 
-  import models.ServiceTypeProtocol._
+@Api(value = "Service Type Api", consumes = "application/json", produces = "application/json")
+class ServiceTypeController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, serviceTypeRepository: ServiceTypeRepository, serviceTypeGroupRepository: ServiceTypeGroupRepository) extends AbstractController(cc) with I18nSupport {
+
   import models.ServiceTypeGroupProtocol._
+  import models.ServiceTypeProtocol._
 
   @ApiOperation(value = "View the service types", response = classOf[ServiceType], responseContainer = "List")
   def listServiceTypes() =

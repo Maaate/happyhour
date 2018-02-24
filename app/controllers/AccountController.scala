@@ -1,7 +1,9 @@
 package controllers
 
 import java.util.UUID
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
+
 import forms.AccountForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -9,9 +11,10 @@ import repository.AccountRepository
 import repository.helpers.SimpleQuery
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
-class AccountController @Inject()(implicit val messagesApi: MessagesApi, accountRepository: AccountRepository) extends Controller with I18nSupport {
+@Singleton
+class AccountController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, accountRepository: AccountRepository) extends AbstractController(cc) with I18nSupport {
+
 
   def createAccount =
     Action { implicit request =>
@@ -67,4 +70,5 @@ class AccountController @Inject()(implicit val messagesApi: MessagesApi, account
         }
       })
     }
+
 }

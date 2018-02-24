@@ -18,43 +18,43 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
 
   def baseQuery(location: Option[Location] = None) =
     s"""SELECT
-      |  pub.id,
-      |  pub.google_id,
-      |  pub.account_id_fk,
-      |  pub.name,
-      |  pub.address,
-      |  pub.address_suburb,
-      |  pub.address_state,
-      |  pub.address_country,
-      |  pub.longitude,
-      |  pub.latitude,
-      |  pub.website_url,
-      |  pub.phone_number,
-      |  pub.hours,
-      |  pub.last_updated,
-      |  pub.enabled,
-      |  ${distanceQuery(location)}
-      |  promotion.id,
-      |  promotion.pub_id_fk,
-      |  promotion.start_time,
-      |  promotion.end_time,
-      |  promotion.description,
-      |  promotion.monday,
-      |  promotion.tuesday,
-      |  promotion.wednesday,
-      |  promotion.thursday,
-      |  promotion.friday,
-      |  promotion.saturday,
-      |  promotion.sunday,
-      |  promotion.next_day_finish,
-      |  promotion.enabled,
-      |  service_type.id,
-      |  service_type.name,
-      |  service_type.service_type_group_id_fk
-      |FROM pub
-      |  LEFT OUTER JOIN promotion ON promotion.pub_id_fk = pub.id
-      |  LEFT JOIN promotion_service_type ON promotion_service_type.promotion_id_fk = promotion.id
-      |  LEFT JOIN service_type ON service_type.id = promotion_service_type.service_type_id_fk
+       |  pub.id,
+       |  pub.google_id,
+       |  pub.account_id_fk,
+       |  pub.name,
+       |  pub.address,
+       |  pub.address_suburb,
+       |  pub.address_state,
+       |  pub.address_country,
+       |  pub.longitude,
+       |  pub.latitude,
+       |  pub.website_url,
+       |  pub.phone_number,
+       |  pub.hours,
+       |  pub.last_updated,
+       |  pub.enabled,
+       |  ${distanceQuery(location)}
+       |  promotion.id,
+       |  promotion.pub_id_fk,
+       |  promotion.start_time,
+       |  promotion.end_time,
+       |  promotion.description,
+       |  promotion.monday,
+       |  promotion.tuesday,
+       |  promotion.wednesday,
+       |  promotion.thursday,
+       |  promotion.friday,
+       |  promotion.saturday,
+       |  promotion.sunday,
+       |  promotion.next_day_finish,
+       |  promotion.enabled,
+       |  service_type.id,
+       |  service_type.name,
+       |  service_type.service_type_group_id_fk
+       |FROM pub
+       |  LEFT OUTER JOIN promotion ON promotion.pub_id_fk = pub.id
+       |  LEFT JOIN promotion_service_type ON promotion_service_type.promotion_id_fk = promotion.id
+       |  LEFT JOIN service_type ON service_type.id = promotion_service_type.service_type_id_fk
     """.stripMargin
 
   def get(id: UUID): Future[Pub] = Future {

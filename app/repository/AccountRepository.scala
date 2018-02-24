@@ -2,16 +2,15 @@ package repository
 
 import java.util.UUID
 import javax.inject.Inject
+import scala.concurrent.Future
 
-import anorm.SqlParser._
-import anorm._
+import anorm.SqlParser.str
+import anorm.{SQL, ~, _}
 import models.Account
 import play.api.Logger
 import play.api.db.DBApi
 import repository.helpers.SimpleQuery
 import util.ExecutionContexts
-
-import scala.concurrent.Future
 
 class AccountRepository @Inject()(val dBApi: DBApi, val executionContexts: ExecutionContexts) extends AbstractRepository {
 
