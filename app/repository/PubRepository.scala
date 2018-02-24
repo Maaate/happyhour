@@ -118,10 +118,14 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
 
   def search(fullPubSearchQuery: FullPubSearchQuery): Future[List[Pub]] = Future {
     db.withConnection { implicit conn =>
-      val enabledParams = Seq(
-        "pub.enabled = true",
-        "promotion.enabled = true"
-      )
+      val enabledParams = if (fullPubSearchQuery.googleId.isDefined) { // exclude when adding new pub
+        Seq()
+      } else {
+        Seq(
+          "pub.enabled = true",
+          "promotion.enabled = true"
+        )
+      }
 
       val locationParams = if (fullPubSearchQuery.location.radius == BigDecimal.valueOf(0.0)) {
         Seq()

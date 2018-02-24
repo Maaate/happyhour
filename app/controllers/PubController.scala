@@ -87,7 +87,7 @@ class PubController @Inject()(implicit override val messagesApi: MessagesApi, cc
 
 
   @ApiOperation(value = "Retrieve Pub from Google if doesn't exist", response = classOf[PubResult])
-  def findByGoogle(@ApiParam(value = "Google Id", example = "ChIJZU5G6zyuEmsRMbD0fFwItf8") placeId: String) = Action.async {
+  def findByGoogle(@ApiParam(value = "Google Id", defaultValue = "ChIJZU5G6zyuEmsRMbD0fFwItf8", example = "ChIJZU5G6zyuEmsRMbD0fFwItf8") placeId: String) = Action.async {
     implicit request =>
       for {
         maybePub <- pubRepository.search(FullPubSearchQuery(googleId = Some(placeId))).map {
