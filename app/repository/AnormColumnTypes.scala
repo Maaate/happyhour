@@ -2,7 +2,7 @@ package repository
 
 import java.util.UUID
 
-import anorm.{SqlParser, RowParser}
+import anorm.{RowParser, SqlParser}
 import org.joda.time.{DateTime, LocalTime}
 
 trait AnormColumnTypes {

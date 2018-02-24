@@ -1,6 +1,5 @@
 package util
 
-
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import play.api.mvc.QueryStringBindable

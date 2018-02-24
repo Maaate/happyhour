@@ -101,3 +101,24 @@ CREATE TABLE pub_metric (
   promotion_id_fk CHAR(36)                 NOT NULL REFERENCES promotion (id),
   note            TEXT                     NOT NULL
 );
+
+
+
+/* Add Users and Voting
+ */
+CREATE TABLE punter (
+  id      CHAR(36)            NOT NULL PRIMARY KEY,
+  email   VARCHAR(255)        NOT NULL UNIQUE,
+  token   VARCHAR(255)        NOT NULL
+);
+
+INSERT INTO punter (id, email, token) VALUES ('1d75e636-8c6f-4629-9318-0654dbd094b7', 'test@test.com', 'test-token');
+
+
+CREATE TABLE vote (
+  created      TIMESTAMP      DEFAULT now()::timestamp,
+  user_id      CHAR(36)       NOT NULL,
+  promotion_id CHAR(36)       NOT NULL
+);
+
+

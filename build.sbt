@@ -1,30 +1,36 @@
 import play.sbt.routes.RoutesKeys
 
-name := """happyhour"""
+name := "happyhourv2"
+ 
+version := "1.0" 
+      
+lazy val `happyhourv2` = (project in file(".")).enablePlugins(PlayScala)
 
-version := "1.0-SNAPSHOT"
+resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
+      
+resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+      
+scalaVersion := "2.12.2"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
-
-scalaVersion := "2.11.8"
-
-resolvers ++= Seq[Resolver](Resolver.mavenLocal)
-
-//credentials += Credentials("Sonatype Nexus Repository Manager", "nexus.simplemachines.com.au", "simplemachines", "uX3I1oL7Jaf3Yop5Ad9F")
-
-libraryDependencies ++= Seq(
-  jdbc,
-  //anorm,
-  cache,
+libraryDependencies ++= Seq( jdbc,
+  ehcache,
   ws,
-  "org.slf4j" % "slf4j-nop" % "1.7.25",
-  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3",
-  "com.typesafe.play" %% "anorm" % "2.5.3",
+  specs2 % Test,
+  guice,
+  "com.adrianhurt" %% "play-bootstrap" % "1.2-P26-B3",
   "org.postgresql" % "postgresql" % "42.1.3",
-  "joda-time" % "joda-time" % "2.9.9",
-  "org.joda" % "joda-convert" % "1.8.2",
-  "org.jsoup" % "jsoup" % "1.10.3",
-  "io.swagger" %% "swagger-play2" % "1.5.3"
+  "com.typesafe.play" %% "anorm" % "2.5.3",
+  "com.typesafe.play" %% "play-json" % "2.6.0",
+  "com.typesafe.play" %% "play-json-joda" % "2.6.4",
+
+  // Documentation
+  "io.swagger" %% "swagger-play2" % "1.6.0"
+
 )
 
+unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
+
 RoutesKeys.routesImport += "util.Bindables._"
+
+      

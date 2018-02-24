@@ -7,4 +7,3 @@ case class SearchResult(pubId: Long,
                         distance: BigDecimal,
                         address: String,
                         promotions: List[Promotion])
-

@@ -13,7 +13,7 @@ import play.api.data.Forms._
 case class PromotionFormData(@ApiModelProperty(value = "Id of the promotion") id: UUID,
                              @ApiModelProperty(value = "Id of the pub", required = true, dataType = "java.util.UUID", example = "eddcd6cd-b8c3-43a9-bef6-9fad92d378ed") pubId: UUID,
                              @ApiModelProperty(value = "Start time of the promotion", required = true, dataType = "org.joda.time.LocalTime", example = "18:00") startTime: LocalTime,
-                             @ApiModelProperty(value = "End time of the promotion", required = true, dataType = "org.joda.time.LocalTime", example = "22:30")  endTime: LocalTime,
+                             @ApiModelProperty(value = "End time of the promotion", required = true, dataType = "org.joda.time.LocalTime", example = "22:30") endTime: LocalTime,
                              @ApiModelProperty(value = "A description of the promotion", required = true, dataType = "String", example = "we sell free beer") description: String,
                              @ApiModelProperty(value = "Monday", required = true, dataType = "Boolean") monday: Boolean,
                              @ApiModelProperty(value = "Tuesday", required = true, dataType = "Boolean") tuesday: Boolean,
@@ -25,7 +25,7 @@ case class PromotionFormData(@ApiModelProperty(value = "Id of the promotion") id
                              @ApiModelProperty(value = "Ids of Services", required = true) serviceTypes: List[Long])
 
 
-object PromotionForm extends AdditionalMappings{
+object PromotionForm extends AdditionalMappings {
 
   def promotionForm: Form[Promotion] = Form(
     mapping(
@@ -48,7 +48,7 @@ object PromotionForm extends AdditionalMappings{
     })
     ({
       case promotion: Promotion =>
-        Some(promotion.id, promotion.pubId, promotion.startTime, promotion.endTime, promotion.description,  promotion.monday, promotion.tuesday, promotion.wednesday, promotion.thursday, promotion.friday, promotion.saturday, promotion.sunday, promotion.serviceTypes.map(_.id.get).toList.sorted.toSet)
+        Some(promotion.id, promotion.pubId, promotion.startTime, promotion.endTime, promotion.description, promotion.monday, promotion.tuesday, promotion.wednesday, promotion.thursday, promotion.friday, promotion.saturday, promotion.sunday, promotion.serviceTypes.map(_.id.get).toList.sorted.toSet)
     }).verifying("You need to select at least 1 day", { p =>
       p.monday || p.tuesday || p.wednesday || p.thursday || p.friday || p.saturday || p.sunday
     })

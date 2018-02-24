@@ -7,6 +7,9 @@ import org.joda.time.DateTime
 import play.api.libs.json.Json
 import models.PromotionProtocol._
 
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
+
 
 case class Pub(id: UUID,
                googleId: Option[String],

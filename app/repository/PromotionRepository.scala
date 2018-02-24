@@ -82,16 +82,16 @@ class PromotionRepository @Inject()(val dBApi: DBApi, val executionContexts: Exe
             'enabled -> promotion.enabled
           ).execute()
 
-          SQL("""DELETE FROM promotion_service_type where promotion_id_fk = {promotionId}""").on('promotionId -> promotion.id).execute()
+        SQL("""DELETE FROM promotion_service_type where promotion_id_fk = {promotionId}""").on('promotionId -> promotion.id).execute()
 
 
-          val updateQuery =
-            """INSERT INTO promotion_service_type(promotion_id_fk, service_type_id_fk)
-              | VALUES ({promotionId}, {serviceTypeId})
-            """.stripMargin
-          val params = promotion.serviceTypes.map{
-            serviceType => Seq(NamedParameter("promotionId", promotion.id), NamedParameter("serviceTypeId", serviceType.id.get))
-          }.toList
+        val updateQuery =
+          """INSERT INTO promotion_service_type(promotion_id_fk, service_type_id_fk)
+            | VALUES ({promotionId}, {serviceTypeId})
+          """.stripMargin
+        val params = promotion.serviceTypes.map{
+          serviceType => Seq(NamedParameter("promotionId", promotion.id), NamedParameter("serviceTypeId", serviceType.id.get))
+        }.toList
         params match {
           case Nil => ()
           case head :: Nil => SQL(updateQuery).on(head: _*).execute()
@@ -105,8 +105,8 @@ class PromotionRepository @Inject()(val dBApi: DBApi, val executionContexts: Exe
       implicit conn =>
         SQL(
           s"""UPDATE promotion
-            |SET enabled = ${enabled}
-            |WHERE id = '${id}'
+             |SET enabled = ${enabled}
+             |WHERE id = '${id}'
           """.stripMargin).execute()
     }
 

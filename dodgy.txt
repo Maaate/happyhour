@@ -1,2 +1,0 @@
-passwords need to be encoded
-hard coded distance bounces to be no more than .1 of a degree long/lat (equates to about 11 km)

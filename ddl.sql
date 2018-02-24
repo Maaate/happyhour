@@ -66,7 +66,3 @@ CREATE TABLE 'happyhour'.'pub_metric' (
   'promotion_id_fk' INT(11) NOT NULL,
   'note' LONGTEXT NOT NULL,
   PRIMARY KEY ('id'));
-
-
-
-

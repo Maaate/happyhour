@@ -1,17 +1,19 @@
 package controllers
 
 import java.util.UUID
-import javax.inject.Inject
-import forms.PromotionForm
-import io.swagger.annotations._
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
-import repository.{ServiceTypeRepository, PromotionRepository, PubRepository}
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import forms.PromotionForm
+import io.swagger.annotations._
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Json
+import play.api.mvc.{AbstractController, ControllerComponents}
+import repository.{PromotionRepository, PubRepository, ServiceTypeRepository}
+
 @Api(value = "Promotion Api", consumes = "application/json", produces = "application/json")
-class PromotionController @Inject()(implicit val messagesApi: MessagesApi, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository) extends Controller with I18nSupport {
+class PromotionController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository) extends AbstractController(cc) with I18nSupport {
+
 
   @ApiOperation(value= "Create Promotion Page Backend", hidden = true)
   def createPromotion() =

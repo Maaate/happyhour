@@ -6,6 +6,10 @@ import io.swagger.annotations.ApiModelProperty
 import org.joda.time.LocalTime
 import play.api.libs.json._
 
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
+
+
 case class Promotion(@ApiModelProperty(required = true) id: UUID,
                      @ApiModelProperty(required = true) pubId: UUID,
                      @ApiModelProperty(required = true) startTime: LocalTime,
