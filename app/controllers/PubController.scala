@@ -96,11 +96,18 @@ class PubController @Inject()(implicit override val messagesApi: MessagesApi, cc
           }
         }
         pub <- maybePub match {
-          case Some(p) => Future.successful(p)
+          case Some(p) => Future.successful(Right(p))
           case _ => pubService.pubFromGoogle(placeId)
         }
-        _ <- pubRepository.save(pub.copy(googleId = Some(placeId)))
-      } yield Ok(Json.toJson(PubResult(pub)))
+      } yield {
+        pub match {
+          case Left(ex) => BadRequest(ex)
+          case Right(p) => {
+            pubRepository.save(p.copy(googleId = Some(placeId)))
+            Ok(Json.toJson(PubResult(p)))
+          }
+        }
+      }
   }
 
   @ApiOperation(value = "View the pub", response = classOf[PubResult])

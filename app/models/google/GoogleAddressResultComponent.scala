@@ -2,7 +2,7 @@ package models.google
 
 import play.api.libs.json.Json
 
-case class GoogleAddressResultComponent(name: String, website: Option[String], international_phone_number: Option[String], opening_hours: Option[GoogleAddressOpeningHours], geometry: GoogleAddressGeometryComponent, address_components: List[GoogleAddressComponent])
+case class GoogleAddressResultComponent(name: String, website: Option[String], international_phone_number: Option[String], opening_hours: Option[GoogleAddressOpeningHours], geometry: GoogleAddressGeometryComponent, address_components: List[GoogleAddressComponent], types: List[String])
 
 case class GoogleAddressGeometryComponent(location: GoogleAddressLocationComponent)
 
