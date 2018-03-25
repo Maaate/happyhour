@@ -12,7 +12,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 
 #System
-GET         /system/healthCheck              @controllers.SystemController.healthCheck
+GET         /api/system/healthCheck           @controllers.SystemController.healthCheck
+GET         /system/healthCheck               @controllers.SystemController.healthCheck
 
 
 #Accounts
