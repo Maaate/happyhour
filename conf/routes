@@ -11,6 +11,10 @@ GET         /swagger/*file                    controllers.Assets.at(path="/publi
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 
+#System
+GET         /system/healthCheck              @controllers.SystemController.healthCheck
+
+
 #Accounts
 GET         /accounts                         @controllers.AccountController.listAccounts(term: Option[String] = None, page: Option[Int] = None, items: Option[Int] = None)
 GET         /accounts/create                  @controllers.AccountController.createAccount

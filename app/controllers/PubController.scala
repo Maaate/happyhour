@@ -115,7 +115,7 @@ class PubController @Inject()(implicit override val messagesApi: MessagesApi, cc
     Action.async { implicit request =>
       for {
         pub <- pubRepository.get(id)
-      } yield Ok((Json.toJson(PubResult(pub))))
+      } yield Ok(Json.toJson(PubResult(pub)))
     }
   }
 
