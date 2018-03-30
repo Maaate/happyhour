@@ -3,6 +3,7 @@ package controllers
 import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import actions.AuthorisedAction
 import forms.PromotionForm
 import io.swagger.annotations._
 import javax.inject.Inject
@@ -12,7 +13,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import repository.{PromotionRepository, PubRepository, ServiceTypeRepository}
 
 @Api(value = "Promotion Api", consumes = "application/json", produces = "application/json")
-class PromotionController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository) extends AbstractController(cc) with I18nSupport {
+class PromotionController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository, auth: AuthorisedAction) extends AbstractController(cc) with I18nSupport {
 
 
   @ApiOperation(value= "Create Promotion Page Backend", hidden = true)
@@ -43,7 +44,7 @@ class PromotionController @Inject()(implicit override val messagesApi: MessagesA
   @ApiResponses(Array(new ApiResponse(code = 400, message = "Invalid input")))
   @ApiImplicitParams(Array(new ApiImplicitParam(value = "The Form Body", required = true, dataType = "forms.PromotionFormData", paramType = "body")))
   def savePromotion() =
-    Action.async {
+    auth.async {
       implicit request =>
         PromotionForm.promotionForm.bindFromRequest().fold({
           formWithErrors => for {

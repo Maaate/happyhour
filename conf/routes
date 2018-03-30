@@ -48,8 +48,3 @@ GET         /api/pubFromGoogle                @controllers.PubController.findByG
 POST        /api/promotion                    @controllers.PromotionController.savePromotion
 PUT         /api/promotion/:id/enable         @controllers.PromotionController.enablePromotion(id: java.util.UUID)
 PUT         /api/promotion/:id/disable        @controllers.PromotionController.disablePromotion(id: java.util.UUID)
-
-#POST        /api/user                         @controllers.UserController.saveUser()
-
-
-      

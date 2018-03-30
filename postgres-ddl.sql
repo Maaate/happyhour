@@ -107,12 +107,15 @@ CREATE TABLE pub_metric (
 /* Add Users and Voting
  */
 CREATE TABLE punter (
-  id      CHAR(36)            NOT NULL PRIMARY KEY,
-  email   VARCHAR(255)        NOT NULL UNIQUE,
-  token   VARCHAR(255)        NOT NULL
+  id                CHAR(36)            NOT NULL PRIMARY KEY,
+  created           TIMESTAMP           DEFAULT now()::timestamp,
+  last_logged_in    TIMESTAMP           DEFAULT now()::timestamp,
+  uid               VARCHAR(255)        UNIQUE NOT NULL,
+  email             VARCHAR(255)        NOT NULL,
+  name              VARCHAR(255)        NOT NULL
 );
 
-INSERT INTO punter (id, email, token) VALUES ('1d75e636-8c6f-4629-9318-0654dbd094b7', 'test@test.com', 'test-token');
+INSERT INTO punter (id, name, email, uid) VALUES ('1d75e636-8c6f-4629-9318-0654dbd094b7', 'testy mctestface', 'test@test.com', 'test-token');
 
 
 CREATE TABLE vote (

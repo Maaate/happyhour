@@ -24,6 +24,9 @@ libraryDependencies ++= Seq( jdbc,
   "com.typesafe.play" %% "play-json" % "2.6.0",
   "com.typesafe.play" %% "play-json-joda" % "2.6.4",
 
+  // Firebase
+  "com.google.firebase" % "firebase-admin" % "5.9.0",
+
   // Documentation
   "io.swagger" %% "swagger-play2" % "1.6.0"
 
