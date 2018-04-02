@@ -20,7 +20,7 @@ class UserRepository @Inject()(val dBApi: DBApi, val executionContexts: Executio
         SQL(
           """INSERT INTO punter (id, uid, email, name)
             |VALUES ({id}, {uid}, {email}, {name})
-            |ON CONFLICT (uid)
+            |ON CONFLICT (uid) DO UPDATE
             |SET name = {name},
             |last_logged_in = {lastLoggedIn},
             |email = {email}
