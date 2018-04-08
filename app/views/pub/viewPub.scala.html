@@ -18,10 +18,6 @@
                 <div>
                     <h4>Promotions</h4>
 
-                    @helper.form(action = routes.PromotionController.createPromotion) {
-                        @b3.hidden("pubId", pub.id)
-                        <button type="submit" value="submit" class="btn btn-primary">New Promotion</button>
-                    }
                     <table class="table">
                         <thead>
                             <tr>
