@@ -94,16 +94,6 @@ INSERT INTO promotion_service_type (promotion_id_fk, service_type_id_fk) VALUES 
 INSERT INTO promotion_service_type (promotion_id_fk, service_type_id_fk) VALUES ('92f62d66-e336-430d-9441-d49e7dce2acd', 2);
 INSERT INTO promotion_service_type (promotion_id_fk, service_type_id_fk) VALUES ('92f62d66-e336-430d-9441-d49e7dce2acd', 4);
 
-CREATE TABLE pub_metric (
-  id              SERIAL                   NOT NULL PRIMARY KEY,
-  timestamp       TIMESTAMP WITH TIME ZONE NOT NULL,
-  pub_id_fk       CHAR(36)                 NOT NULL REFERENCES pub (id),
-  promotion_id_fk CHAR(36)                 NOT NULL REFERENCES promotion (id),
-  note            TEXT                     NOT NULL
-);
-
-
-
 /* Add Users and Voting
  */
 CREATE TABLE punter (
@@ -118,10 +108,12 @@ CREATE TABLE punter (
 INSERT INTO punter (id, name, email, uid) VALUES ('1d75e636-8c6f-4629-9318-0654dbd094b7', 'testy mctestface', 'test@test.com', 'test-token');
 
 
-CREATE TABLE vote (
-  created      TIMESTAMP      DEFAULT now()::timestamp,
-  user_id      CHAR(36)       NOT NULL,
-  promotion_id CHAR(36)       NOT NULL
+CREATE TABLE punter_activity (
+  id              SERIAL                   NOT NULL PRIMARY KEY,
+  timestamp       TIMESTAMP WITH TIME ZONE DEFAULT now()::timestamp,
+  punter_id_fk    CHAR(36)                 NOT NULL REFERENCES punter (id),
+  pub_id_fk       CHAR(36)                 REFERENCES pub (id),
+  promotion_id_fk CHAR(36)                 REFERENCES promotion (id),
+  action          TEXT                     NOT NULL
 );
-
 

@@ -19,16 +19,6 @@ class AuthorisedAction @Inject()(val parser: BodyParsers.Default, firebase: Fire
 
   private val logger = Logger(this.getClass.getCanonicalName)
 
-  //def transform[A](request: Request[A]): Future[UserRequest[A]] = Future.successful {
-  /*firebase.validateToken(request.headers.get("Authorization").getOrElse("")) match {
-    case Left(e) => Unauthorized("Invalid credential")
-    case Right(token) => new UserRequest(User(UUID.randomUUID(), new DateTime(), new DateTime(), token.getUid, token.getEmail, token.getName), request)
-  }*/
-  //new UserRequest(User(UUID.randomUUID(), new DateTime(), new DateTime(), "", "", ""), request)
-  //}
-  /*override def invokeBlock[A](request: Request[A], block: UserRequest[A] => Future[Result]): Future[Result] = {
-    Future.successful(Ok("Invalid credential"))
-  }*/
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     val header = request.headers.get("Authorization").getOrElse("").replaceFirst("Bearer ", "")
 
@@ -47,25 +37,3 @@ class AuthorisedAction @Inject()(val parser: BodyParsers.Default, firebase: Fire
     }
   }
 }
-/*
-object JWTAuthentication extends ActionBuilder[UserRequest] {
-def invokeBlock[A](request: Request[A], block: (UserRequest[A]) => Future[Result]): Future[Result] = {
-  val jwtToken = request.headers.get("jw_token").getOrElse("")
-
-  if (JwtUtility.isValidToken(jwtToken)) {
-    JwtUtility.decodePayload(jwtToken).fold {
-      Future.successful(Unauthorized("Invalid credential"))
-    } { payload =>
-      val userCredentials = Json.parse(payload).validate[User].get
-
-      // Replace this block with data source
-      val maybeUserInfo = dataSource.getUser(userCredentials.email, userCredentials.userId)
-
-      maybeUserInfo.fold(Future.successful(Unauthorized("Invalid credential")))(userInfo => block(UserRequest(userInfo, request)))
-    }
-  } else {
-    Future.successful(Unauthorized("Invalid credential"))
-  }
-}
-}
-*/

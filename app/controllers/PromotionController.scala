@@ -11,9 +11,10 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import repository.{PromotionRepository, PubRepository, ServiceTypeRepository}
+import services.PromotionService
 
 @Api(value = "Promotion Api", consumes = "application/json", produces = "application/json")
-class PromotionController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository, auth: AuthorisedAction) extends AbstractController(cc) with I18nSupport {
+class PromotionController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository, promotionService: PromotionService, auth: AuthorisedAction) extends AbstractController(cc) with I18nSupport {
 
 
   @ApiOperation(value= "Create Promotion Page Backend", hidden = true)
@@ -51,16 +52,16 @@ class PromotionController @Inject()(implicit override val messagesApi: MessagesA
             serviceTypes <- serviceTypeRepository.list
           } yield render {
             case Accepts.Json() => BadRequest(Json.toJson(formWithErrors.errors.map(e => s"${e.key}:${e.message}")))
-            case Accepts.Html() => BadRequest(views.html.promotion.editPromotion(formWithErrors, serviceTypes))
+            //case Accepts.Html() => BadRequest(views.html.promotion.editPromotion(formWithErrors, serviceTypes))
             case _ => UnsupportedMediaType("errors")
           }
         }, {
           promotion => for {
-            - <- promotionRepository.save(promotion)
+            - <- promotionService.save(promotion, None)
             pub <- pubRepository.get(promotion.pubId)
           } yield render {
             case Accepts.Json() => Ok("")
-            case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
+            //case Accepts.Html() => Ok(views.html.pub.viewPub(pub))
             case _ => UnsupportedMediaType("Unsupported Media type")
           }
         }

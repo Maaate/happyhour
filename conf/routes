@@ -31,9 +31,9 @@ GET         /pub/:id/edit                     @controllers.PubController.editPub
 POST        /pub                              @controllers.PubController.savePub
 
 #Promotions
-GET         /promotion/create                 @controllers.PromotionController.createPromotion
+#GET         /promotion/create                 @controllers.PromotionController.createPromotion
 GET         /promotion/:id/edit               @controllers.PromotionController.editPromotion(id: java.util.UUID)
-POST        /promotion                        @controllers.PromotionController.savePromotion
+#POST        /promotion                        @controllers.PromotionController.savePromotion
 GET         /promotion/:id/enable             @controllers.PromotionController.enablePromotion(id: java.util.UUID)
 GET         /promotion/:id/disable            @controllers.PromotionController.disablePromotion(id: java.util.UUID)
 
