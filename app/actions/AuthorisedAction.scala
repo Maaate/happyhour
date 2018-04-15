@@ -12,7 +12,7 @@ import play.api.mvc._
 import repository.UserRepository
 import services.FirebaseService
 
-case class UserRequest[A](user: User, request: Request[A]) extends WrappedRequest(request)
+case class UserRequest[A](user: Option[User], request: Request[A]) extends WrappedRequest(request)
 
 class AuthorisedAction @Inject()(val parser: BodyParsers.Default, firebase: FirebaseService, userRepository: UserRepository)(implicit val executionContext: ExecutionContext)
   extends ActionBuilder[UserRequest, AnyContent] with ActionRefiner[Request, UserRequest] {
@@ -22,16 +22,17 @@ class AuthorisedAction @Inject()(val parser: BodyParsers.Default, firebase: Fire
   override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
     val header = request.headers.get("Authorization").getOrElse("").replaceFirst("Bearer ", "")
 
-    logger.info(s"header: $header")
+    logger.debug(s"header: $header")
 
     firebase.validateToken(header) match {
       case Left(e) => Future.successful(Left(Unauthorized("Invalid credential")))
       case Right(token) => {
         val user = User(UUID.randomUUID(), new DateTime(), new DateTime(), token.getUid, token.getEmail, token.getName)
         for {
-          saved <- userRepository.save(user)
+          _ <- userRepository.save(user)
+          saved <- userRepository.getByFirebaseUid(user.uid)
         } yield {
-          Right(new UserRequest(user, request))
+          Right(new UserRequest(Some(saved), request))
         }
       }
     }

@@ -57,7 +57,7 @@ class PromotionController @Inject()(implicit override val messagesApi: MessagesA
           }
         }, {
           promotion => for {
-            - <- promotionService.save(promotion, None)
+            - <- promotionService.save(promotion, request.user)
             pub <- pubRepository.get(promotion.pubId)
           } yield render {
             case Accepts.Json() => Ok("")

@@ -14,6 +14,17 @@ import org.joda.time.DateTime
 
 class UserRepository @Inject()(val dBApi: DBApi, val executionContexts: ExecutionContexts) extends AbstractRepository {
 
+  private val baseQuery =
+    """SELECT
+      |punter.id,
+      |punter.created,
+      |punter.last_logged_in,
+      |punter.uid,
+      |punter.email,
+      |punter.name
+      |FROM punter
+    """.stripMargin
+
   def save(user: User): Future[Unit] = Future {
     db.withTransaction {
       implicit  conn =>
@@ -32,6 +43,14 @@ class UserRepository @Inject()(val dBApi: DBApi, val executionContexts: Executio
           'email -> user.email,
           'name -> user.name
         ).execute()
+    }
+  }
+
+  def getByFirebaseUid(uid: String): Future[User] = Future{
+    db.withTransaction { implicit conn =>
+      SQL(baseQuery + " WHERE punter.uid = {uid}")
+        .on('uid -> uid)
+        .as(UserRepository.RowParser.UserParse.single)
     }
   }
 
