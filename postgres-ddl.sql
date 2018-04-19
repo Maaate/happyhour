@@ -109,7 +109,7 @@ INSERT INTO punter (id, name, email, uid) VALUES ('1d75e636-8c6f-4629-9318-0654d
 
 
 CREATE TABLE punter_activity (
-  id              SERIAL                   NOT NULL PRIMARY KEY,
+  id              CHAR(36)                 NOT NULL PRIMARY KEY,
   timestamp       TIMESTAMP WITH TIME ZONE DEFAULT now()::timestamp,
   punter_id_fk    CHAR(36)                 NOT NULL REFERENCES punter (id),
   pub_id_fk       CHAR(36)                 REFERENCES pub (id),
