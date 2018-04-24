@@ -43,7 +43,7 @@ class PromotionController @Inject()(implicit override val messagesApi: MessagesA
     }
   }
 
-  @ApiOperation(value = "Save Promotion")
+  @ApiOperation(value = "Save Promotion", notes = "This needs firebase authentication to work and I haven't set that up so it won't work, just look and enjoy for the time being")
   @ApiResponses(Array(new ApiResponse(code = 400, message = "Invalid input")))
   @ApiImplicitParams(Array(new ApiImplicitParam(value = "The Form Body", required = true, dataType = "forms.PromotionFormData", paramType = "body")))
   def savePromotion() =
