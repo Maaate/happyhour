@@ -1,16 +1,15 @@
 package repository
 
 import java.util.UUID
-import javax.inject.Inject
 
+import javax.inject.Inject
 import anorm.JodaParameterMetaData._
 import anorm.SqlParser._
 import anorm._
-import models.Promotion
+import models.{Promotion, Pub}
 import play.api.Logger
 import play.api.db.DBApi
 import util.ExecutionContexts
-
 import scala.concurrent.Future
 
 class PromotionRepository @Inject()(val dBApi: DBApi, val executionContexts: ExecutionContexts) extends AbstractRepository {
@@ -44,6 +43,41 @@ class PromotionRepository @Inject()(val dBApi: DBApi, val executionContexts: Exe
       SQL(baseQuery + "WHERE promotion.id = {id}")
         .on('id -> id)
         .as(PromotionRepository.RowParsers.PromotionParse.*) reduce (combine)
+    }
+  }
+
+  def getSimilar(promotion: Promotion) = {
+    Future {
+      db.withConnection {
+        implicit conn =>
+          SQL(baseQuery +
+            """WHERE promotion.pub_id_fk = {pubId}
+              | AND start_time = {startTime}
+              | AND end_time = {endTime}
+              | AND monday = {monday}
+              | AND tuesday = {tuesday}
+              | AND wednesday = {wednesday}
+              | AND thursday = {thursday}
+              | AND friday = {friday}
+              | AND saturday = {saturday}
+              | AND sunday = {sunday}
+            """.stripMargin)
+            .on('pubId -> promotion.pubId,
+              'startTime -> promotion.startTime.toDateTimeToday,
+              'endTime -> promotion.endTime.toDateTimeToday,
+              'monday -> promotion.monday,
+              'tuesday -> promotion.tuesday,
+              'wednesday -> promotion.wednesday,
+              'thursday -> promotion.thursday,
+              'friday -> promotion.friday,
+              'saturday -> promotion.saturday,
+              'sunday -> promotion.sunday)
+            .as(PromotionRepository.RowParsers.PromotionParse.*).foldLeft(List[Promotion]()) {
+            case (existing: List[Promotion], p: Promotion) => {
+              existing.filterNot(_.id == p.id) :+ combine(existing.find(_.id == p.id).getOrElse(p), p)
+            }
+          }
+      }
     }
   }
 
