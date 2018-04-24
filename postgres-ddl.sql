@@ -16,8 +16,7 @@ CREATE TABLE account (
 
 INSERT INTO account (id, name, username, password, first_name, last_name, phone)
 VALUES
-  ('9b309e02-5bd2-4f19-a944-fe958aecbdb8', 'Root Account', 'admin@happyhourhunter.com.au', 'blah', 'admin', 'admin',
-   '1234567890');
+  ('9b309e02-5bd2-4f19-a944-fe958aecbdb8', 'Root Account', 'admin@happyhourhunter.com.au', 'blah', 'admin', 'admin','1234567890');
 
 CREATE TABLE service_type_group (
   id   SERIAL NOT NULL PRIMARY KEY,
@@ -60,8 +59,7 @@ CREATE TABLE pub (
 );
 
 INSERT INTO pub (id, name, address, address_suburb, address_state, address_country, longitude, latitude, account_id_fk)
-VALUES ('eddcd6cd-b8c3-43a9-bef6-9fad92d378ed', 'test pub', 'middle of the ocean', 'test', 'test', 'test', -60, -140,
-        '9b309e02-5bd2-4f19-a944-fe958aecbdb8');
+VALUES ('eddcd6cd-b8c3-43a9-bef6-9fad92d378ed', 'test pub', 'middle of the ocean', 'test', 'test', 'test', -60, -140,'9b309e02-5bd2-4f19-a944-fe958aecbdb8');
 
 CREATE INDEX pubLocationIndex ON pub USING GIST (ll_to_earth(latitude, longitude));
 
@@ -82,8 +80,11 @@ CREATE TABLE promotion (
   enabled         BOOLEAN                NOT NULL DEFAULT TRUE
 );
 
-INSERT INTO promotion (id, start_time, end_time, description, pub_id_fk, friday)
-VALUES ('92f62d66-e336-430d-9441-d49e7dce2acd', '16:00', '20:00', 'Sample Promotion for Testing', 'eddcd6cd-b8c3-43a9-bef6-9fad92d378ed', true);
+INSERT INTO promotion (id, start_time, end_time, description, pub_id_fk, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+VALUES ('92f62d66-e336-430d-9441-d49e7dce2acd', '16:00', '20:00', 'Sample Promotion for Testing all week', 'eddcd6cd-b8c3-43a9-bef6-9fad92d378ed', true, true, true, true, true, true, true);
+
+INSERT INTO promotion (id, start_time, end_time, description, pub_id_fk, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+VALUES ('d5e9ed72-4a52-4ca0-9849-0b7aba050868', '17:00', '20:30', 'Sample Promotion for Testing weekend only', 'eddcd6cd-b8c3-43a9-bef6-9fad92d378ed', false, false, false, false, false, true, true);
 
 CREATE TABLE promotion_service_type (
   promotion_id_fk    CHAR(36) REFERENCES promotion (id),
