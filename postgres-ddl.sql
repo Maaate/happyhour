@@ -6,6 +6,7 @@ CREATE EXTENSION earthdistance;
 
 CREATE TABLE account (
   id         CHAR(36)     NOT NULL PRIMARY KEY,
+  created    TIMESTAMP    DEFAULT now()::timestamp,
   name       VARCHAR(255) NOT NULL,
   username   VARCHAR(255) NOT NULL,
   password   VARCHAR(255) NOT NULL,
@@ -41,21 +42,22 @@ INSERT INTO service_type (name, service_type_group_id_fk) VALUES ('cider', 1);
 INSERT INTO service_type (name, service_type_group_id_fk) VALUES ('coffee', 2);
 
 CREATE TABLE pub (
-  id              CHAR(36)       NOT NULL PRIMARY KEY,
-  google_id       VARCHAR(255)            DEFAULT NULL,
-  name            VARCHAR(255)   NOT NULL,
-  address         VARCHAR(255)   NOT NULL,
-  address_suburb  VARCHAR(255)   NOT NULL,
-  address_state   VARCHAR(255)   NOT NULL,
-  address_country VARCHAR(255)   NOT NULL,
-  longitude       DECIMAL(10, 6) NOT NULL,
-  latitude        DECIMAL(10, 6) NOT NULL,
-  account_id_fk   CHAR(36)       NOT NULL REFERENCES account (id),
-  website_url     VARCHAR(255)            DEFAULT NULL,
-  phone_number    VARCHAR(255)            DEFAULT NULL,
-  hours           TEXT           DEFAULT NULL,
-  last_updated    TIMESTAMP      DEFAULT now()::timestamp,
-  enabled         BOOLEAN        NOT NULL DEFAULT TRUE
+  id                   CHAR(36)       NOT NULL PRIMARY KEY,
+  created              TIMESTAMP              DEFAULT now()::timestamp,
+  google_id            VARCHAR(255)            DEFAULT NULL,
+  name                 VARCHAR(255)   NOT NULL,
+  address              VARCHAR(255)   NOT NULL,
+  address_suburb       VARCHAR(255)   NOT NULL,
+  address_state        VARCHAR(255)   NOT NULL,
+  address_country      VARCHAR(255)   NOT NULL,
+  longitude            DECIMAL(10, 6) NOT NULL,
+  latitude             DECIMAL(10, 6) NOT NULL,
+  account_id_fk        CHAR(36)       NOT NULL REFERENCES account (id),
+  website_url          VARCHAR(255)            DEFAULT NULL,
+  phone_number         VARCHAR(255)            DEFAULT NULL,
+  hours                TEXT           DEFAULT NULL,
+  updated_by_google    TIMESTAMP      DEFAULT now()::timestamp,
+  enabled              BOOLEAN        NOT NULL DEFAULT TRUE
 );
 
 INSERT INTO pub (id, name, address, address_suburb, address_state, address_country, longitude, latitude, account_id_fk)
@@ -65,6 +67,7 @@ CREATE INDEX pubLocationIndex ON pub USING GIST (ll_to_earth(latitude, longitude
 
 CREATE TABLE promotion (
   id              CHAR(36)               NOT NULL PRIMARY KEY,
+  created         TIMESTAMP              DEFAULT now()::timestamp,
   start_time      TIME WITHOUT TIME ZONE NOT NULL,
   end_time        TIME WITHOUT TIME ZONE NOT NULL,
   description     TEXT                   NOT NULL,

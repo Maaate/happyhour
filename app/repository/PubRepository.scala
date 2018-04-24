@@ -31,7 +31,7 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
        |  pub.website_url,
        |  pub.phone_number,
        |  pub.hours,
-       |  pub.last_updated,
+       |  pub.updated_by_google,
        |  pub.enabled,
        |  ${distanceQuery(location)}
        |  promotion.id,
@@ -69,8 +69,8 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
     db.withTransaction {
       implicit conn =>
         SQL(
-          """INSERT INTO pub (id, google_id, account_id_fk, name, address, address_suburb, address_state, address_country, longitude, latitude, website_url, phone_number, hours, last_updated, enabled)
-            |VALUES ({id}, {googleId}, {accountId}, {name}, {address}, {addressSuburb}, {addressState}, {addressCountry}, {longitude}, {latitude}, {websiteUrl}, {phoneNumber}, {hours}, {lastUpdated}, {enabled})
+          """INSERT INTO pub (id, google_id, account_id_fk, name, address, address_suburb, address_state, address_country, longitude, latitude, website_url, phone_number, hours, updated_by_google, enabled)
+            |VALUES ({id}, {googleId}, {accountId}, {name}, {address}, {addressSuburb}, {addressState}, {addressCountry}, {longitude}, {latitude}, {websiteUrl}, {phoneNumber}, {hours}, {updatedByGoogle}, {enabled})
             |ON CONFLICT (id) DO UPDATE
             |SET account_id_fk = {accountId},
             |name = {name},
@@ -84,7 +84,7 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
             |website_url = {websiteUrl},
             |phone_number = {phoneNumber},
             |hours = {hours},
-            |last_updated = {lastUpdated}
+            |updated_by_google = {updatedByGoogle}
           """.stripMargin)
           .on('id -> pub.id,
             'googleId -> pub.googleId,
@@ -99,7 +99,7 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
             'websiteUrl -> pub.website,
             'hours -> pub.hoursOpenString,
             'phoneNumber -> pub.phoneNumber,
-            'lastUpdated -> pub.lastUpdatedByGoogle,
+            'updatedByGoogle -> pub.updatedByGoogle,
             'enabled -> pub.enabled
           )
           .execute()
@@ -211,7 +211,7 @@ object PubRepository extends AnormColumnTypes {
       str("pub.website_url").? ~
       str("pub.phone_number").? ~
       str("pub.hours").? ~
-      dateTime("pub.last_updated").? ~
+      dateTime("pub.updated_by_google").? ~
       bool("pub.enabled")
   }
 

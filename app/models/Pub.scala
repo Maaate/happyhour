@@ -24,7 +24,7 @@ case class Pub(id: UUID,
                website: Option[String],
                phoneNumber: Option[String],
                hoursOpenString: Option[String],
-               lastUpdatedByGoogle: Option[DateTime],
+               updatedByGoogle: Option[DateTime],
                enabled: Boolean,
                //distanceInMetres: BigDecimal,
                promotions: Set[Promotion]) {
