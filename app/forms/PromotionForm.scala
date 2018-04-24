@@ -12,8 +12,8 @@ import play.api.data.Forms._
 // KEEP UPDATED
 case class PromotionFormData(@ApiModelProperty(value = "Id of the promotion") id: UUID,
                              @ApiModelProperty(value = "Id of the pub", required = true, dataType = "java.util.UUID", example = "eddcd6cd-b8c3-43a9-bef6-9fad92d378ed") pubId: UUID,
-                             @ApiModelProperty(value = "Start time of the promotion", required = true, dataType = "org.joda.time.LocalTime", example = "18:00") startTime: LocalTime,
-                             @ApiModelProperty(value = "End time of the promotion", required = true, dataType = "org.joda.time.LocalTime", example = "22:30") endTime: LocalTime,
+                             @ApiModelProperty(value = "Start time of the promotion", required = true, dataType = "String", example = "16:00") startTime: LocalTime,
+                             @ApiModelProperty(value = "End time of the promotion", required = true, dataType = "String", example = "20:00") endTime: LocalTime,
                              @ApiModelProperty(value = "A description of the promotion", required = true, dataType = "String", example = "we sell free beer") description: String,
                              @ApiModelProperty(value = "Monday", required = true, dataType = "Boolean") monday: Boolean,
                              @ApiModelProperty(value = "Tuesday", required = true, dataType = "Boolean") tuesday: Boolean,
@@ -22,7 +22,7 @@ case class PromotionFormData(@ApiModelProperty(value = "Id of the promotion") id
                              @ApiModelProperty(value = "Friday", required = true, dataType = "Boolean") friday: Boolean,
                              @ApiModelProperty(value = "Saturday", required = true, dataType = "Boolean") saturday: Boolean,
                              @ApiModelProperty(value = "Sunday", required = true, dataType = "Boolean") sunday: Boolean,
-                             @ApiModelProperty(value = "Ids of Services", required = true) serviceTypes: List[Long])
+                             @ApiModelProperty(value = "Ids of Services", required = true, allowableValues = "1,2") serviceTypes: List[Long])
 
 
 object PromotionForm extends AdditionalMappings {
