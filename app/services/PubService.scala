@@ -1,16 +1,14 @@
 package services
 
+import java.time.LocalDateTime
 import java.util.UUID
-import javax.inject.Inject
 
+import javax.inject.Inject
 import models.Pub
 import models.google.GoogleAddressResultComponent
-import org.joda.time.DateTime
 import play.api.libs.ws.WSClient
 import repository.PubRepository
-
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import scala.concurrent.Future
 
 class PubService @Inject()( pubRepository: PubRepository, ws: WSClient) {
@@ -29,6 +27,7 @@ class PubService @Inject()( pubRepository: PubRepository, ws: WSClient) {
         val res = (response.json \ "result").validate[GoogleAddressResultComponent]
         if ((validPlaceType diff res.get.types).size < validPlaceType.size) {
           Right(Pub(uuid,
+            LocalDateTime.now(),
             Some(placeId),
             res.get.name,
             res.get.address_components.filterNot(_.types.contains("political")).filterNot(_.types.contains("postal_code")).map(_.long_name).mkString(" "),
@@ -41,7 +40,7 @@ class PubService @Inject()( pubRepository: PubRepository, ws: WSClient) {
             res.get.website,
             res.get.international_phone_number,
             res.get.opening_hours.map(_.weekday_text.mkString(",")),
-            Some(new DateTime()),
+            Some(LocalDateTime.now()),
             true,
             Set()
           ))

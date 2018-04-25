@@ -1,6 +1,8 @@
 package controllers
 
-import java.util.UUID
+import java.time.format.TextStyle
+import java.time.{DayOfWeek, LocalDateTime}
+import java.util.{Locale, UUID}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -133,10 +135,10 @@ class PubController @Inject()(implicit override val messagesApi: MessagesApi, cc
                 ) =
     Action.async { implicit request =>
       val daytext = dayOfWeek match {
-        case Some(day) => new DateTime().withDayOfWeek(day).dayOfWeek().getAsText
-        case _ => DateTime.now().dayOfWeek().getAsText
+        case Some(day) => DayOfWeek.of(day)
+        case _ => LocalDateTime.now.getDayOfWeek
       }
-      pubRepository.search(FullPubSearchQuery(Location(lat, long, distanceInMetres), Some(currentTime), Some(daytext), serviceTypeGroupIds = serviceTypeGroupIds, serviceTypeIds = serviceTypeIds,  current = current)).map {
+      pubRepository.search(FullPubSearchQuery(Location(lat, long, distanceInMetres), Some(currentTime), Some(daytext.getDisplayName(TextStyle.FULL, Locale.ENGLISH)), serviceTypeGroupIds = serviceTypeGroupIds, serviceTypeIds = serviceTypeIds,  current = current)).map {
         pubs => Ok(Json.toJson(pubs.map(PubResult(_))))
       }
     }

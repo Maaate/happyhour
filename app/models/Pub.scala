@@ -1,17 +1,14 @@
 package models
 
+import java.time.LocalDateTime
 import java.util.UUID
 
 import io.swagger.annotations.ApiModelProperty
-import org.joda.time.DateTime
 import play.api.libs.json.Json
 import models.PromotionProtocol._
 
-import play.api.libs.json.JodaWrites._
-import play.api.libs.json.JodaReads._
-
-
 case class Pub(id: UUID,
+               created: LocalDateTime,
                googleId: Option[String],
                name: String,
                address: String,
@@ -24,9 +21,8 @@ case class Pub(id: UUID,
                website: Option[String],
                phoneNumber: Option[String],
                hoursOpenString: Option[String],
-               updatedByGoogle: Option[DateTime],
+               updatedByGoogle: Option[LocalDateTime],
                enabled: Boolean,
-               //distanceInMetres: BigDecimal,
                promotions: Set[Promotion]) {
 
   def withPromotions(proms: Set[Promotion]) = {
@@ -50,7 +46,6 @@ case class PubResult(@ApiModelProperty(required = true) id: UUID,
                      hours: Option[String],
                      @ApiModelProperty(required = true) longitude: BigDecimal,
                      @ApiModelProperty(required = true) latitude: BigDecimal,
-                     //@ApiModelProperty(required = true) distance: BigDecimal,
                      @ApiModelProperty(required = true) promotions: Set[Promotion])
 
 object PubResult {

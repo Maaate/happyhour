@@ -1,5 +1,6 @@
 package repository
 
+import java.time.{LocalDateTime, ZoneId}
 import java.util.UUID
 
 import anorm.{RowParser, SqlParser}
@@ -19,4 +20,9 @@ trait AnormColumnTypes {
 
   def dateTime(columnName: String): RowParser[DateTime] =
     SqlParser.date(columnName).map(d => new DateTime(d))
+
+  def localDateTime(columnName: String): RowParser[LocalDateTime] =
+    SqlParser.date(columnName).map(d => d.toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDateTime)
 }

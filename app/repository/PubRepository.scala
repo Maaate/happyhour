@@ -1,24 +1,23 @@
 package repository
 
 import java.util.UUID
-import javax.inject.Inject
+import scala.concurrent.Future
 
-import anorm.JodaParameterMetaData._
 import anorm.SqlParser._
 import anorm._
+import javax.inject.Inject
 import models.Pub
 import play.api.Logger
 import play.api.db.DBApi
 import repository.helpers.{Ascending, FullPubSearchQuery, Location, SimpleQuery}
 import util.ExecutionContexts
 
-import scala.concurrent.Future
-
 class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: ExecutionContexts) extends AbstractRepository {
 
   def baseQuery(location: Option[Location] = None) =
     s"""SELECT
        |  pub.id,
+       |  pub.created,
        |  pub.google_id,
        |  pub.account_id_fk,
        |  pub.name,
@@ -199,6 +198,7 @@ object PubRepository extends AnormColumnTypes {
 
   object RowDefinitions {
     val PubRow = uuidFromString("pub.id") ~
+      localDateTime("pub.created") ~
       str("pub.google_id").? ~
       str("pub.name") ~
       str("pub.address") ~
@@ -211,14 +211,14 @@ object PubRepository extends AnormColumnTypes {
       str("pub.website_url").? ~
       str("pub.phone_number").? ~
       str("pub.hours").? ~
-      dateTime("pub.updated_by_google").? ~
+      localDateTime("pub.updated_by_google").? ~
       bool("pub.enabled")
   }
 
   object RowParsers {
     val PubParse = (RowDefinitions.PubRow ~ PromotionRepository.RowParsers.PromotionParse.?).map {
-      case id ~ googleId ~ name ~ address ~ addressSuburb ~ addressState ~ addressCountry ~ longitude ~ latitude ~ accountId ~ website ~ phoneNumber ~ hours ~ updatedByGoogle ~ enabled ~ promotions=>
-        Pub(id, googleId, name, address, addressSuburb, addressState, addressCountry, longitude, latitude, accountId, website, phoneNumber, hours, updatedByGoogle, enabled, promotions.toSet)
+      case id ~ created ~ googleId ~ name ~ address ~ addressSuburb ~ addressState ~ addressCountry ~ longitude ~ latitude ~ accountId ~ website ~ phoneNumber ~ hours ~ updatedByGoogle ~ enabled ~ promotions=>
+        Pub(id, created, googleId, name, address, addressSuburb, addressState, addressCountry, longitude, latitude, accountId, website, phoneNumber, hours, updatedByGoogle, enabled, promotions.toSet)
     }
   }
 
