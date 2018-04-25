@@ -1,11 +1,10 @@
 package models
 
+import java.time.LocalDateTime
 import java.util.UUID
 
-import org.joda.time.DateTime
-
 case class UserActivity(id: UUID = UUID.randomUUID(),
-                        timeStamp: DateTime = new DateTime(),
+                        timeStamp: LocalDateTime = LocalDateTime.now(),
                         userId: UUID,
                         pubId: Option[UUID],
                         promotionId: Option[UUID],

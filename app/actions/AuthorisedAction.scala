@@ -1,5 +1,6 @@
 package actions
 
+import java.time.LocalDateTime
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -27,7 +28,7 @@ class AuthorisedAction @Inject()(val parser: BodyParsers.Default, firebase: Fire
     firebase.validateToken(header) match {
       case Left(e) => Future.successful(Left(Unauthorized("Invalid credential")))
       case Right(token) => {
-        val user = User(UUID.randomUUID(), new DateTime(), new DateTime(), token.getUid, token.getEmail, token.getName)
+        val user = User(UUID.randomUUID(), LocalDateTime.now(), LocalDateTime.now(), token.getUid, token.getEmail, token.getName)
         for {
           _ <- userRepository.save(user)
           saved <- userRepository.getByFirebaseUid(user.uid)

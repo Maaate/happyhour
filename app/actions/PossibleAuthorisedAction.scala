@@ -1,5 +1,6 @@
 package actions
 
+import java.time.LocalDateTime
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -21,7 +22,7 @@ class PossibleAuthorisedAction @Inject()(val parser: BodyParsers.Default, fireba
 
     firebase.validateToken(header) match {
       case Left(e) => Future.successful(UserRequest(None, request))
-      case Right(token) => Future.successful(UserRequest(Some(User(UUID.randomUUID(), new DateTime(), new DateTime(), token.getUid, token.getEmail, token.getName)), request))
+      case Right(token) => Future.successful(UserRequest(Some(User(UUID.randomUUID(), LocalDateTime.now(), LocalDateTime.now(), token.getUid, token.getEmail, token.getName)), request))
     }
 
   }

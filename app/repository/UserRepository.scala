@@ -62,8 +62,8 @@ object UserRepository extends AnormColumnTypes {
 
   object RowDefinitions {
     val UserRow = uuidFromString("punter.id") ~
-      dateTime("punter.created") ~
-      dateTime("punter.last_logged_in") ~
+      localDateTime("punter.created") ~
+      localDateTime("punter.last_logged_in") ~
       str("punter.uid") ~
       str("punter.email") ~
       str("punter.name")

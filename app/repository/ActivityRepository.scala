@@ -14,11 +14,12 @@ class ActivityRepository  @Inject()(val dBApi: DBApi, val executionContexts: Exe
     db.withTransaction {
       implicit  conn =>
         SQL(
-          """INSERT INTO punter_activity (id, punter_id_fk, pub_id_fk, promotion_id_fk, action)
-            |VALUES ({id}, {punterId}, {pubId}, {promotionId}, {action})
+          """INSERT INTO punter_activity (id, timeStamp, punter_id_fk, pub_id_fk, promotion_id_fk, action)
+            |VALUES ({id}, {timeStamp}, {punterId}, {pubId}, {promotionId}, {action})
           """.stripMargin
         ).on(
           'id -> userActivity.id,
+          'timeStamp -> userActivity.timeStamp,
           'punterId -> userActivity.userId,
           'pubId -> userActivity.pubId,
           'promotionId -> userActivity.promotionId,
