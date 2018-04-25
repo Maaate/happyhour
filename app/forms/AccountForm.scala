@@ -1,5 +1,6 @@
 package forms
 
+import java.time.LocalDateTime
 import java.util.UUID
 
 import models.Account
@@ -11,6 +12,7 @@ object AccountForm {
   val accountForm: Form[Account] = Form(
     mapping(
       "id" -> default(uuid, UUID.randomUUID()),
+      "created" -> default(localDateTime, LocalDateTime.now()),
       "name" -> text,
       "username" -> text,
       "password" -> text,

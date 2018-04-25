@@ -18,6 +18,7 @@ class AccountRepository @Inject()(val dBApi: DBApi, val executionContexts: Execu
     """
       SELECT
         account.id,
+        account.created,
         account.name,
         account.username,
         account.password,
@@ -87,6 +88,7 @@ object AccountRepository extends AnormColumnTypes {
 
   object RowDefinitions {
     val AccountRow = uuidFromString("account.id") ~
+      localDateTime("account.created") ~
       str("account.name") ~
       str("account.username") ~
       str("account.password") ~
@@ -97,7 +99,7 @@ object AccountRepository extends AnormColumnTypes {
 
   object RowParsers {
     val AccountParse = (RowDefinitions.AccountRow).map {
-      case id ~ name ~ username ~ password ~ firstName ~ lastName ~ phone => Account(id, name, username, password, firstName, lastName, phone)
+      case id ~ created ~ name ~ username ~ password ~ firstName ~ lastName ~ phone => Account(id, created, name, username, password, firstName, lastName, phone)
     }
   }
 
