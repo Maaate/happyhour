@@ -17,6 +17,7 @@ class PromotionRepository @Inject()(val dBApi: DBApi, val executionContexts: Exe
   val baseQuery =
     """SELECT
       | promotion.id,
+      | promotion.created,
       | promotion.pub_id_fk,
       | promotion.start_time,
       | promotion.end_time,
@@ -159,6 +160,7 @@ object PromotionRepository extends AnormColumnTypes {
 
   object RowDefinitions {
     val promotionRow = uuidFromString("promotion.id") ~
+      localDateTime("promotion.created") ~
       uuidFromString("promotion.pub_id_fk") ~
       localTime("promotion.start_time") ~
       localTime("promotion.end_time") ~
@@ -176,8 +178,8 @@ object PromotionRepository extends AnormColumnTypes {
 
   object RowParsers {
     val PromotionParse = (RowDefinitions.promotionRow ~ ServiceTypeRepository.RowParsers.ServiceTypeParse.?).map {
-      case id ~ pubId ~ startTime ~ endTime ~ nextDayFinish ~ description ~ monday ~ tuesday ~ wednesday ~ thursday ~ friday ~ saturday ~ sunday ~ enabled ~ services =>
-        Promotion(id, pubId, startTime, endTime, nextDayFinish, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday, enabled, services.toSet)
+      case id ~ created ~ pubId ~ startTime ~ endTime ~ nextDayFinish ~ description ~ monday ~ tuesday ~ wednesday ~ thursday ~ friday ~ saturday ~ sunday ~ enabled ~ services =>
+        Promotion(id, created, pubId, startTime, endTime, nextDayFinish, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday, enabled, services.toSet)
     }
   }
 

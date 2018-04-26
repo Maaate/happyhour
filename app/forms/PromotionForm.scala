@@ -1,9 +1,10 @@
 package forms
 
+import java.time.LocalDateTime
 import java.util.UUID
 
 import io.swagger.annotations.ApiModelProperty
-import models.{ServiceType, Promotion}
+import models.{Promotion, ServiceType}
 import org.joda.time.LocalTime
 import play.api.data.Form
 import play.api.data.Forms._
@@ -43,7 +44,7 @@ object PromotionForm extends AdditionalMappings {
       "sunday" -> boolean,
       "serviceTypes" -> set(longNumber)
     )({ (id, pubId, startTime, endTime, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday, serviceTypes) => {
-      Promotion(id, pubId, startTime, endTime, startTime.isAfter(endTime), description, monday, tuesday, wednesday, thursday, friday, saturday, sunday, true, serviceTypes.map(id => ServiceType(Some(id), "", 1)))
+      Promotion(id, LocalDateTime.now(), pubId, startTime, endTime, startTime.isAfter(endTime), description, monday, tuesday, wednesday, thursday, friday, saturday, sunday, true, serviceTypes.map(id => ServiceType(Some(id), "", 1)))
     }
     })
     ({

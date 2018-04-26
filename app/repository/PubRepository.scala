@@ -34,6 +34,7 @@ class PubRepository @Inject()(val dBApi: DBApi, val executionContexts: Execution
        |  pub.enabled,
        |  ${distanceQuery(location)}
        |  promotion.id,
+       |  promotion.created,
        |  promotion.pub_id_fk,
        |  promotion.start_time,
        |  promotion.end_time,
