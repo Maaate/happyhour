@@ -14,7 +14,14 @@ import repository.{PromotionRepository, PubRepository, ServiceTypeRepository}
 import services.PromotionService
 
 @Api(value = "Promotion Api", consumes = "application/json", produces = "application/json")
-class PromotionController @Inject()(implicit override val messagesApi: MessagesApi, cc: ControllerComponents, promotionRepository: PromotionRepository, pubRepository: PubRepository, serviceTypeRepository: ServiceTypeRepository, promotionService: PromotionService, auth: AuthorisedAction, possibleAuth: PossibleAuthorisedAction) extends AbstractController(cc) with I18nSupport {
+class PromotionController @Inject()(implicit override val messagesApi: MessagesApi,
+                                    cc: ControllerComponents,
+                                    promotionRepository: PromotionRepository,
+                                    pubRepository: PubRepository,
+                                    serviceTypeRepository: ServiceTypeRepository,
+                                    promotionService: PromotionService,
+                                    auth: AuthorisedAction,
+                                    possibleAuth: PossibleAuthorisedAction) extends AbstractController(cc) with I18nSupport {
 
 
   import models.PromotionProtocol._

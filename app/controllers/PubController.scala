@@ -10,7 +10,7 @@ import forms.PubForm
 import io.swagger.annotations.{Api, ApiOperation, ApiParam}
 import javax.inject.Inject
 import models.PubResult
-import org.joda.time.{DateTime, LocalTime}
+import org.joda.time.LocalTime
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient

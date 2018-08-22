@@ -6,11 +6,12 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.{FirebaseApp, FirebaseOptions}
 import javax.inject.{Inject, Singleton}
+import models.AuthenticationToken
 import play.api.Configuration
 import repository.UserRepository
 
 @Singleton
-class FirebaseService @Inject()(userRepository: UserRepository, config: Configuration) {
+class RealFireBaseService @Inject()(userRepository: UserRepository, config: Configuration) extends BaseFireBaseService{
 
 
   val serviceType = config.get[String]("external.firebase.serviceType")
@@ -41,16 +42,16 @@ class FirebaseService @Inject()(userRepository: UserRepository, config: Configur
       |""".stripMargin
 
 
-  val stream = new ByteArrayInputStream(code.getBytes("UTF-8"))
+  private val credentials = new ByteArrayInputStream(code.getBytes("UTF-8"))
 
-  val options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(stream)).setDatabaseUrl("https://happyhourandroid.firebaseio.com").build()
+  private val options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(credentials)).setDatabaseUrl("https://happyhourandroid.firebaseio.com").build()
 
-  val app = FirebaseApp.initializeApp(options)
+  private val app = FirebaseApp.initializeApp(options)
 
 
-  def validateToken(token: String) =
+  def validateToken(token: String): Either[Exception, AuthenticationToken]  =
     try {
-      Right(FirebaseAuth.getInstance().verifyIdTokenAsync(token).get())
+      Right(AuthenticationToken(FirebaseAuth.getInstance().verifyIdTokenAsync(token).get()))
     } catch {
       case e: Exception => Left(e)
     }

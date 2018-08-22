@@ -6,16 +6,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import javax.inject.Inject
 import models.User
-import org.joda.time.DateTime
 import play.api.Logger
 import play.api.mvc.Results.Unauthorized
 import play.api.mvc._
 import repository.UserRepository
-import services.FirebaseService
+import services.BaseFireBaseService
 
 case class UserRequest[A](user: Option[User], request: Request[A]) extends WrappedRequest(request)
 
-class AuthorisedAction @Inject()(val parser: BodyParsers.Default, firebase: FirebaseService, userRepository: UserRepository)(implicit val executionContext: ExecutionContext)
+class AuthorisedAction @Inject()(val parser: BodyParsers.Default, baseFireBaseService: BaseFireBaseService, userRepository: UserRepository)(implicit val executionContext: ExecutionContext)
   extends ActionBuilder[UserRequest, AnyContent] with ActionRefiner[Request, UserRequest] {
 
   private val logger = Logger(this.getClass.getCanonicalName)
@@ -25,10 +24,10 @@ class AuthorisedAction @Inject()(val parser: BodyParsers.Default, firebase: Fire
 
     logger.debug(s"header: $header")
 
-    firebase.validateToken(header) match {
+    baseFireBaseService.validateToken(header) match {
       case Left(e) => Future.successful(Left(Unauthorized("Invalid credential")))
       case Right(token) => {
-        val user = User(UUID.randomUUID(), LocalDateTime.now(), LocalDateTime.now(), token.getUid, token.getEmail, token.getName)
+        val user = User(UUID.randomUUID(), LocalDateTime.now(), LocalDateTime.now(), token.uid, token.email, token.name)
         for {
           _ <- userRepository.save(user)
           saved <- userRepository.getByFirebaseUid(user.uid)

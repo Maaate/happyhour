@@ -1,4 +1,6 @@
 import com.google.inject.AbstractModule
+import services.{BaseFireBaseService, MockFireBackService, RealFireBaseService}
+import play.api.{Configuration, Environment}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -10,10 +12,17 @@ import com.google.inject.AbstractModule
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-class Module extends AbstractModule {
+class Module(environment: Environment,
+             configuration: Configuration) extends AbstractModule {
 
   override def configure() = {
+    val envConfig: Configuration = configuration.getOptional[Configuration]("variables").getOrElse(Configuration.empty)
 
+    if (envConfig.get[String]("env").equals("local")) {
+      bind(classOf[BaseFireBaseService]).to(classOf[MockFireBackService])
+    } else {
+      bind(classOf[BaseFireBaseService]).to(classOf[RealFireBaseService])
+    }
   }
 
 }
