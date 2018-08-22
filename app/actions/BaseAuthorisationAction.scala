@@ -4,20 +4,23 @@ import java.time.LocalDateTime
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
-import javax.inject.Inject
 import models.User
 import play.api.Logger
 import play.api.mvc.Results.Unauthorized
-import play.api.mvc._
+import play.api.mvc.{Request, WrappedRequest}
 import repository.UserRepository
 import services.BaseFireBaseService
 
-class AuthorisedAction @Inject()(val parser: BodyParsers.Default,
-                                 override val baseFireBaseService: BaseFireBaseService,
-                                 override val userRepository: UserRepository)(implicit override val executionContext: ExecutionContext)
-  extends ActionBuilder[UserRequest, AnyContent] with ActionRefiner[Request, UserRequest] with BaseAuthorisationAction {
+trait BaseAuthorisationAction {
 
-  override protected def refine[A](request: Request[A]): Future[Either[Result, UserRequest[A]]] = {
+  def baseFireBaseService: BaseFireBaseService
+  def userRepository: UserRepository
+
+  implicit def executionContext: ExecutionContext
+
+  val logger = Logger(this.getClass.getCanonicalName)
+
+  def saveUser[A](request: Request[A]) = {
     val header = request.headers.get("Authorization").getOrElse("").replaceFirst("Bearer ", "")
 
     logger.debug(s"header: $header")
@@ -35,4 +38,7 @@ class AuthorisedAction @Inject()(val parser: BodyParsers.Default,
       }
     }
   }
+
 }
+
+case class UserRequest[A](user: Option[User], request: Request[A]) extends WrappedRequest(request)

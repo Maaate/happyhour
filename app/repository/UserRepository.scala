@@ -19,7 +19,7 @@ class UserRepository @Inject()(val dBApi: DBApi, val executionContexts: Executio
       |punter.id,
       |punter.created,
       |punter.last_logged_in,
-      |punter.uid,
+      |punter.google_uid,
       |punter.email,
       |punter.name
       |FROM punter
@@ -29,9 +29,9 @@ class UserRepository @Inject()(val dBApi: DBApi, val executionContexts: Executio
     db.withTransaction {
       implicit  conn =>
         SQL(
-          """INSERT INTO punter (id, uid, email, name)
-            |VALUES ({id}, {uid}, {email}, {name})
-            |ON CONFLICT (uid) DO UPDATE
+          """INSERT INTO punter (id, google_uid, email, name)
+            |VALUES ({id}, {google_uid}, {email}, {name})
+            |ON CONFLICT (google_uid) DO UPDATE
             |SET name = {name},
             |last_logged_in = {lastLoggedIn},
             |email = {email}
@@ -39,17 +39,17 @@ class UserRepository @Inject()(val dBApi: DBApi, val executionContexts: Executio
         ).on(
           'id -> user.id,
           'lastLoggedIn -> new DateTime(),
-          'uid -> user.uid,
+          'google_uid -> user.googleUid,
           'email -> user.email,
           'name -> user.name
         ).execute()
     }
   }
 
-  def getByFirebaseUid(uid: String): Future[User] = Future{
+  def getByFirebaseUid(googleUid: String): Future[User] = Future{
     db.withTransaction { implicit conn =>
-      SQL(baseQuery + " WHERE punter.uid = {uid}")
-        .on('uid -> uid)
+      SQL(baseQuery + " WHERE punter.google_uid = {google_uid}")
+        .on('google_uid -> googleUid)
         .as(UserRepository.RowParser.UserParse.single)
     }
   }
@@ -64,14 +64,14 @@ object UserRepository extends AnormColumnTypes {
     val UserRow = uuidFromString("punter.id") ~
       localDateTime("punter.created") ~
       localDateTime("punter.last_logged_in") ~
-      str("punter.uid") ~
+      str("punter.google_uid") ~
       str("punter.email") ~
       str("punter.name")
   }
 
   object RowParser {
     val UserParse = (RowDefinitions.UserRow).map {
-      case id ~ created ~ lastLoggedIn ~ uid ~ email ~ name => User(id, created, lastLoggedIn, uid, email, name)
+      case id ~ created ~ lastLoggedIn ~ googleUid ~ email ~ name => User(id, created, lastLoggedIn, googleUid, email, name)
     }
   }
 

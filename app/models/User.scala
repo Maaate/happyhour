@@ -11,7 +11,7 @@ import play.api.libs.json.JodaReads._
 case class User(id: UUID = UUID.randomUUID(),
                 created: LocalDateTime,
                 lastLoggedIn: LocalDateTime,
-                uid: String,
+                googleUid: String,
                 email: String,
                 name: String)
 
